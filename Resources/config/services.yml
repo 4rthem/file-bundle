@@ -1,0 +1,27 @@
+parameters:
+    arthem_fileupload.file_downloader.class: Arthem\Bundle\FileUploadBundle\Downloader\FileDownloader
+    arthem_fileupload.file_upload_manager.class: Arthem\Bundle\FileUploadBundle\Model\FileUploadManager
+    arthem_fileupload.http_client.class: Buzz\Client\Curl
+
+services:
+    arthem_fileupload.http_client:
+        public: false
+        class: %arthem_fileupload.http_client.class%
+
+    arthem_fileupload.file_downloader:
+        class: %arthem_fileupload.file_downloader.class%
+        arguments:
+            - @arthem_fileupload.http_client
+            - @stof_doctrine_extensions.uploadable.manager
+            - %arthem_fileupload.model.file.class%
+
+    arthem_fileupload.file_upload_manager:
+        class: %arthem_fileupload.file_upload_manager.class%
+        scope: request
+        arguments:
+            - @arthem_base.object_manager
+            - @form.factory
+            - @arthem_fileupload.image_manager
+            - @templating.helper.assets
+            - @translator
+            - @request

@@ -1,0 +1,44 @@
+Arthem\Bundle\FileUploadBundle\Model\File:
+    type: mappedSuperclass
+    gedmo:
+        uploadable:
+            allowOverwrite: false
+            appendNumber: true
+            pathMethod: getPath
+            callback: callbackMethod
+            filenameGenerator: SHA1
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        path:
+            type: string
+            length: 255
+            gedmo:
+                - uploadableFilePath
+        originalFilename:
+            type: string
+            length: 255
+        extension:
+            type: string
+            length: 10
+        token:
+            type: string
+            length: 255
+            nullable: true
+        mimeType:
+            type: string
+            length: 100
+            gedmo:
+                - uploadableFileMimeType
+        size:
+            type: decimal
+            gedmo:
+                - uploadableFileSize
+        createdAt:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: create

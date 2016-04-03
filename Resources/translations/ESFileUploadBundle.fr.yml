@@ -1,0 +1,20 @@
+
+form:
+    remove_file:
+        label: Supprimer
+    file:
+        browse: Parcourir
+    unknown_error_message: Désolé, une erreur est survenue
+    pending_uploads: Téléchargement en cours...
+
+flashes:
+    delete:
+        success: Le fichier a bien été supprimé
+
+crop:
+    actions:
+        save: Valider
+        cancel: Annuler
+        crop: Redimensionner
+        change_picture: Changer la photo
+        remove_picture: Supprimer la photo

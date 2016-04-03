@@ -1,0 +1,33 @@
+Arthem\Bundle\FileUploadBundle\Model\ImageCrop:
+    type: mappedSuperclass
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        filterName:
+            type: string
+            length: 30
+        top:
+            column: top
+            type: float
+        left:
+            column: l
+            type: float
+        width:
+            column: w
+            type: float
+        height:
+            column: h
+            type: float
+        createdAt:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: create
+        updatedAt:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update

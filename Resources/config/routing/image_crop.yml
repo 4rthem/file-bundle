@@ -1,0 +1,4 @@
+
+arthem_file_upload_image_crop:
+    path:     /files/images/crop
+    defaults: { _controller: ArthemFileUploadBundle:File:imageCrop }

@@ -1,0 +1,12 @@
+$file-preview-width: 300px !default;
+$file-preview-height: 100px !default;
+$file-preview-icon-width: 88px !default;
+$file-preview-icon-height: $file-preview-icon-width !default;
+
+$crop-width: $file-preview-width !default;
+$crop-area-width: 150px !default;
+$crop-area-height: $crop-area-width !default;
+$crop-controls-width: 150px !default;
+
+$input-crop-area-width: $file-preview-icon-width !default;
+$input-crop-area-height: $file-preview-icon-height !default;

@@ -1,0 +1,22 @@
+parameters:
+    arthem_fileupload.listener.uploadable.class: Arthem\Bundle\FileUploadBundle\EventListener\UploadableListener
+
+services:
+    arthem_fileupload.listener.uploadable:
+        public: false
+        class: %arthem_fileupload.listener.uploadable.class%
+        arguments:
+            - @stof_doctrine_extensions.uploadable.manager
+            #- @liip_imagine.cache.manager
+            #- %liip_imagine.filter_sets%
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    arthem_fileupload.doctrine.listener.mapping:
+        parent: arthem_base.doctrine.listener.concrete_class
+        class: Arthem\Bundle\FileUploadBundle\Doctrine\MappingListener
+        arguments:
+            - %arthem_fileupload.model.file.class%
+            - %arthem_fileupload.model.file.table%
+        tags:
+            - { name: doctrine.event_subscriber }

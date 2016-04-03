@@ -1,0 +1,5 @@
+
+arthem_fileupload:
+    file:
+        too_large: "The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}."
+        mime_type: "The type of the file is invalid ({{ type }}). Allowed types are {{ types }}."

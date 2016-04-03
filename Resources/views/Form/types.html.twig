@@ -1,0 +1,129 @@
+{% trans_default_domain 'ArthemFileUploadBundle' %}
+
+{% block arthem_file_widget %}
+    {% spaceless %}
+        <div id="{{ id }}" class="{{ attr.class|default('') is not empty ? attr.class ~ ' ' : '' }}cn-fileupload">
+            {{ form_widget(form.file, {attr: {style: 'display:none;' }}) }}
+            {% if browse_label is not empty %}
+                {{ block('browse_button') }}
+            {% endif %}
+            {{ form_widget(form.id) }}
+
+            <div class="cn-template" style="display:none">
+                {% set file = null %}
+                {{ block('file_preview') }}
+            </div>
+            {% if display_placeholder %}
+                <div class="cn-fileupload-placeholder"{% if files|length > 0 %} style="display:none;"{% endif %}>
+                    {{ block('image_placeholder') }}
+                </div>
+            {% endif %}
+            {% if display_preview %}
+                <div class="cn-files">
+                    {% for file in files %}
+                        {% if file.id %}
+                            {{ block('file_preview') }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        {{ form_errors(form.file) }}
+
+        <script>
+            $(function () {
+                $('#{{ id }}').arthemFileUpload({{ js_options|raw }});
+            });
+        </script>
+    {% endspaceless %}
+{% endblock %}
+
+{% block browse_button %}
+    {% spaceless %}
+        <a href="javascript:void(0)"
+           class="cn-fileupload-browse">
+            <i></i>
+            <span>{{ browse_label|trans({}, browse_translation_domain) }}</span>
+        </a>
+    {% endspaceless %}
+{% endblock %}
+
+{% block image_placeholder %}
+    <div class="cn-fileupload-placeholder">
+        <img src="{{ parent_class|image_placeholder(name, filter_name) }}">
+    </div>
+{% endblock %}
+
+{% block file_preview %}
+    <div class="cn-file-preview">
+        {% if crop %}
+            {{ block('crop_wrapper') }}
+        {% else %}
+            <a class="cn-file-open-btn" href="{{ file and file.url ? asset(file.url) : 'javascript:void(0)' }}"
+               target="_blank">
+                <div class="cn-file-icon">
+                    {% if file and file.mime_type %}
+                        {% if file.mime_type matches '{^image/}' %}
+                            <img src="{{ file.url|imagine_filter(filter_name) }}">
+                        {% else %}
+                            <div class="fa fa-{{ file.icon }}"></div>
+                        {% endif %}
+                    {% elseif display_placeholder %}
+                        <img src="{{ parent_class|image_placeholder(name, filter_name) }}">
+                    {% endif %}
+                </div>
+                {% if display_preview_name %}
+                    <div class="cn-file-name">
+                        {{ file ? file.name : null }}
+                    </div>
+                {% endif %}
+            </a>
+        {% endif %}
+
+        {% if not file %}
+            <div class="cn-progress progress progress-striped active">
+                <div class="cn-progress-bar progress-bar" role="progressbar"></div>
+            </div>
+        {% endif %}
+
+        <div class="cn-remove-file">
+            <a href="javascript:void(0)"
+               {% if file %}data-file-id="{{ file.id }}"{% endif %}
+               class="cn-remove-file-btn btn btn-danger btn-xs"
+               title="{{ remove_file_label|trans|raw }}">
+                &times;
+            </a>
+        </div>
+        <div class="cn-fileupload-errors"></div>
+    </div>
+{% endblock %}
+
+{% block crop_wrapper %}
+    <div class="cn-image-crop"
+            {% if file %}
+                data-origin-src="{{ asset(file.url) }}"
+                data-file-id="{{ file.id }}"
+                {% set _crop = file.object.imageCrop(filter_name) %}
+                {% if _crop is not null %}
+                    data-coords="{{ _crop.coords }}"
+                {% endif %}
+            {% endif %}
+            >
+        <div class="cn-crop-area cn-file-icon"
+                {% if file %}
+                    style="background-image:url({{ file.url|imagine_filter(filter_name) }})"
+                {% endif %}
+                ></div>
+        <div class="cn-crop-controls">
+            <div class="cn-progress"></div>
+            <div class="cn-crop-actions">
+                <div class="cn-crop-slider"></div>
+                <a href="javascript:void(0)" class="btn btn-primary cn-save-btn">{{ 'crop.actions.save'|trans }}</a>
+                <a href="javascript:void(0)" class="btn btn-default cn-cancel-btn">{{ 'crop.actions.cancel'|trans }}</a>
+            </div>
+        </div>
+        <div class="cn-crop-outer-btns">
+            <a href="javascript:void(0)" class="btn btn-primary cn-crop-btn">{{ 'crop.actions.crop'|trans }}</a>
+        </div>
+    </div>
+{% endblock %}

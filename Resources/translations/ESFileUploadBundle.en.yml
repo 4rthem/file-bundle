@@ -1,0 +1,20 @@
+
+form:
+    remove_file:
+        label: Remove
+    file:
+        browse: Browse
+    unknown_error_message: Sorry, an error has occured
+    pending_uploads: Pending upload...
+
+flashes:
+    delete:
+        success: File has been removed
+
+crop:
+    actions:
+        save: Save
+        cancel: Cancel
+        crop: Crop
+        change_picture: Change picture
+        remove_picture: Delete picture

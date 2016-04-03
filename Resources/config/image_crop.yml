@@ -1,0 +1,12 @@
+
+services:
+    arthem_fileupload.image_crop_manager:
+        class: Arthem\Bundle\FileUploadBundle\Doctrine\ImageCropManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - %arthem_fileupload.model.file.class%
+            - %arthem_fileupload.model.image_crop.class%
+            - @liip_imagine.cache.manager
+            - @liip_imagine.data.manager
+            - @liip_imagine.filter.manager
+            - %arthem_fileupload.crop.linked_filters%
