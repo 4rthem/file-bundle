@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Model;
+namespace Arthem\Bundle\FileBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Arthem\Bundle\FileUploadBundle\ImageManager;
+use Arthem\Bundle\FileBundle\ImageManager;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -120,7 +120,7 @@ class FileUploadManager
     private function getErrors(FormInterface $form, array &$errors)
     {
         foreach ($form->getErrors() as $error) {
-            $errors[] = $this->translator->trans($error->getMessage(), $error->getMessageParameters(), 'ArthemFileUploadBundle');
+            $errors[] = $this->translator->trans($error->getMessage(), $error->getMessageParameters(), 'ArthemFileBundle');
         }
         foreach ($form as $child) {
             $this->getErrors($child, $errors);

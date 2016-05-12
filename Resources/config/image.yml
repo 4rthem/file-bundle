@@ -1,7 +1,7 @@
 
 parameters:
-    arthem_fileupload.image_manager.class: Arthem\Bundle\FileUploadBundle\ImageManager
-    arthem_fileupload.twig.extension.image.class: Arthem\Bundle\FileUploadBundle\Twig\Extension\ImageExtension
+    arthem_fileupload.image_manager.class: Arthem\Bundle\FileBundle\ImageManager
+    arthem_fileupload.twig.extension.image.class: Arthem\Bundle\FileBundle\Twig\Extension\ImageExtension
 
 services:
     arthem_fileupload.image_manager:

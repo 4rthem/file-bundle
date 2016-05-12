@@ -1,11 +1,11 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\Downloader;
+namespace Arthem\Bundle\FileBundle\Downloader;
 
 use Buzz\Client\Curl;
 use Buzz\Message\Request;
 use Buzz\Message\Response;
-use Arthem\Bundle\FileUploadBundle\Model\FileInterface;
+use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Gedmo\Uploadable\MimeType\MimeTypesExtensionsMap;
 use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

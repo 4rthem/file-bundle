@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Controller;
+namespace Arthem\Bundle\FileBundle\Controller;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,7 +38,7 @@ class FileController extends Controller
         }
 
         $translator = $this->get('translator');
-        $this->get('session')->getFlashBag()->add('success', $translator->trans('flashes.delete.success', [], 'ArthemFileUploadBundle'));
+        $this->get('session')->getFlashBag()->add('success', $translator->trans('flashes.delete.success', [], 'ArthemFileBundle'));
 
         return $this->redirect($request->headers->get('referer'));
     }

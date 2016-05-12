@@ -1,7 +1,7 @@
 
 services:
     arthem_fileupload.image_crop_manager:
-        class: Arthem\Bundle\FileUploadBundle\Doctrine\ImageCropManager
+        class: Arthem\Bundle\FileBundle\Doctrine\ImageCropManager
         arguments:
             - @doctrine.orm.entity_manager
             - %arthem_fileupload.model.file.class%

@@ -6,7 +6,7 @@
 Downloader service returns a Arthem uploaded file (`FileInterface`) in order to map it with your model.
 
 ```php
-use Arthem\Bundle\FileUploadBundle\Model\FileInterface;
+use Arthem\Bundle\FileBundle\Model\FileInterface;
 
 $fileDownloader = $container->get('arthem_fileupload.file_downloader');
 /** @var FileInterface $file */

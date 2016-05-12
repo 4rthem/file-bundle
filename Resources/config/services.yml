@@ -1,6 +1,6 @@
 parameters:
-    arthem_fileupload.file_downloader.class: Arthem\Bundle\FileUploadBundle\Downloader\FileDownloader
-    arthem_fileupload.file_upload_manager.class: Arthem\Bundle\FileUploadBundle\Model\FileUploadManager
+    arthem_fileupload.file_downloader.class: Arthem\Bundle\FileBundle\Downloader\FileDownloader
+    arthem_fileupload.file_upload_manager.class: Arthem\Bundle\FileBundle\Model\FileUploadManager
     arthem_fileupload.http_client.class: Buzz\Client\Curl
 
 services:

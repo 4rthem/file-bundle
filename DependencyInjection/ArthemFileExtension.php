@@ -1,6 +1,6 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\DependencyInjection;
+namespace Arthem\Bundle\FileBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class ArthemFileUploadExtension extends Extension
+class ArthemFileExtension extends Extension
 {
     /**
      * {@inheritDoc}

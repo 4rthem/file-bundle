@@ -1,6 +1,6 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\Fixture;
+namespace Arthem\Bundle\FileBundle\Fixture;
 
 use Arthem\Bundle\FixturesBundle\Extension\FixtureExtension;
 use Arthem\Bundle\FixturesBundle\Fixtures\FixtureData;

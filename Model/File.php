@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Model;
+namespace Arthem\Bundle\FileBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

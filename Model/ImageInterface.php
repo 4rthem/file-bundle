@@ -1,5 +1,5 @@
 <?php
-namespace Arthem\Bundle\FileUploadBundle\Model;
+namespace Arthem\Bundle\FileBundle\Model;
 
 interface ImageInterface extends FileInterface
 {

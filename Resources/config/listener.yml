@@ -1,5 +1,5 @@
 parameters:
-    arthem_fileupload.listener.uploadable.class: Arthem\Bundle\FileUploadBundle\EventListener\UploadableListener
+    arthem_fileupload.listener.uploadable.class: Arthem\Bundle\FileBundle\EventListener\UploadableListener
 
 services:
     arthem_fileupload.listener.uploadable:
@@ -14,7 +14,7 @@ services:
 
     arthem_fileupload.doctrine.listener.mapping:
         parent: arthem_base.doctrine.listener.concrete_class
-        class: Arthem\Bundle\FileUploadBundle\Doctrine\MappingListener
+        class: Arthem\Bundle\FileBundle\Doctrine\MappingListener
         arguments:
             - %arthem_fileupload.model.file.class%
             - %arthem_fileupload.model.file.table%

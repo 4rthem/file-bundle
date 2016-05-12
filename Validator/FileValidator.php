@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Validator;
+namespace Arthem\Bundle\FileBundle\Validator;
 
-use Arthem\Bundle\FileUploadBundle\Model\FileInterface;
+use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\FileValidator as BaseFileValidator;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Form\TinyMce;
+namespace Arthem\Bundle\FileBundle\Form\TinyMce;
 
 use Arthem\Bundle\BaseBundle\Form\TinyMce\AbstractTinyMceExtension;
 use Symfony\Component\Routing\RouterInterface;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Validator;
+namespace Arthem\Bundle\FileBundle\Validator;
 
 use Symfony\Component\Validator\Constraints\File as BaseFile;
 

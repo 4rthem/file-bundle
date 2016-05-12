@@ -1,5 +1,5 @@
 parameters:
-    arthem_fileupload.form.file.type.class: Arthem\Bundle\FileUploadBundle\Form\Type\FileType
+    arthem_fileupload.form.file.type.class: Arthem\Bundle\FileBundle\Form\Type\FileType
     arthem_fileupload.form.default.origin_filter_name: large
     arthem_fileupload.form.default.filter_name: small
     arthem_fileupload.form.default.preview_width: 88
@@ -23,7 +23,7 @@ services:
             - { name: form.type, alias: arthem_file }
 
     arthem_fileupload.form.tinymce.plugin.arthem_image_upload:
-        class: Arthem\Bundle\FileUploadBundle\Form\TinyMce\ImageUploadExtension
+        class: Arthem\Bundle\FileBundle\Form\TinyMce\ImageUploadExtension
         arguments:
             - @router
             - @security.csrf.token_manager

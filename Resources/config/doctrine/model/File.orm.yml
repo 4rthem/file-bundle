@@ -1,4 +1,4 @@
-Arthem\Bundle\FileUploadBundle\Model\File:
+Arthem\Bundle\FileBundle\Model\File:
     type: mappedSuperclass
     gedmo:
         uploadable:
