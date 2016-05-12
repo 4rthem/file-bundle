@@ -1,9 +1,9 @@
 
 # Desc: /files/delete
-arthem_file_upload_file_delete: /fichiers/supprimer
+arthem_file_file_delete: /fichiers/supprimer
 
 # Desc: /files/upload
-arthem_file_upload_file_upload: /fichiers/upload
+arthem_file_file_upload: /fichiers/upload
 
 # Desc: /files/images/crop
-arthem_file_upload_image_crop: /fichiers/images/redimensionner
+arthem_file_image_crop: /fichiers/images/redimensionner

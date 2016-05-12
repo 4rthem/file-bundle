@@ -1,7 +1,7 @@
-arthem_file_upload_file_upload:
+arthem_file_file_upload:
     path:     /files/upload
     defaults: { _controller: ArthemFileBundle:File:upload }
 
-arthem_file_upload_file_delete:
+arthem_file_file_delete:
     path:     /files/delete
     defaults: { _controller: ArthemFileBundle:File:delete }

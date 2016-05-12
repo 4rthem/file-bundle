@@ -249,7 +249,7 @@ class FileType extends AbstractType
             'display_placeholder'       => false,
             'preview_width'             => $this->defaultPreviewWidth,
             'preview_height'            => $this->defaultPreviewHeight,
-            'upload_route_name'         => 'arthem_file_upload_file_upload',
+            'upload_route_name'         => 'arthem_file_file_upload',
             'url'                       => function (Options $options) {
                 return $this->router->generate($options['upload_route_name']);
             },
@@ -347,7 +347,7 @@ class FileType extends AbstractType
         if ($options['crop']) {
             $jsOptions['crop']         = true;
             $jsOptions['crop_options'] = [
-                'cropUrl' => $this->router->generate('arthem_file_upload_image_crop'),
+                'cropUrl' => $this->router->generate('arthem_file_image_crop'),
             ];
         }
 

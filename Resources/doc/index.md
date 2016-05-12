@@ -4,7 +4,7 @@ Update your routing:
 
 ```yaml
 # app/routing.yml
-arthem_file_upload:
+arthem_file:
     resource: "@ArthemFileBundle/Resources/config/routing.yml"
     prefix: /
 ```
@@ -89,7 +89,7 @@ class User
 Enable image module:
 
 ```yaml
-arthem_file_upload:
+arthem_file:
     image:
         placeholders:
             Acme\DemoBundle\Entity\User:
@@ -103,7 +103,7 @@ If you wish to override the default file model, declare the new class in your co
 ```yaml
 # app/config/config.yml
 
-arthem_file_upload:
+arthem_file:
     file_class: Acme\DemoBundle\Entity\File
 ```
 

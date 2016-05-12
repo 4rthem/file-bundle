@@ -35,7 +35,7 @@ class ImageUploadExtension extends AbstractTinyMceExtension
     function getConfigurations()
     {
         return [
-            'image_upload_path' => $this->router->generate('arthem_file_upload_file_upload'),
+            'image_upload_path' => $this->router->generate('arthem_file_file_upload'),
             'session_token'     => $this->csrfTokenManager->getToken('file')->getValue(),
         ];
     }
