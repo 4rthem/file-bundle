@@ -1,12 +1,12 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\Form\Type;
+namespace Arthem\Bundle\FileBundle\Form\Type;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
-use Arthem\Bundle\FileUploadBundle\EventListener\UploadableListener;
-use Arthem\Bundle\FileUploadBundle\Model\FileInterface;
-use Arthem\Bundle\FileUploadBundle\Validator\File;
+use Arthem\Bundle\FileBundle\EventListener\UploadableListener;
+use Arthem\Bundle\FileBundle\Model\FileInterface;
+use Arthem\Bundle\FileBundle\Validator\File;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -232,7 +232,7 @@ class FileType extends AbstractType
             'error_bubbling'            => false,
             'intention'                 => 'file',
             'browse_label'              => 'form.file.browse',
-            'browse_translation_domain' => 'ArthemFileUploadBundle',
+            'browse_translation_domain' => 'ArthemFileBundle',
             'display_preview_name'      => false,
             'data_class'                => function (Options $options) {
                 if ($options['multiple']) {
@@ -381,7 +381,7 @@ class FileType extends AbstractType
 
     private function translate($id, array $parameters = [])
     {
-        return $this->translator->trans($id, $parameters, 'ArthemFileUploadBundle');
+        return $this->translator->trans($id, $parameters, 'ArthemFileBundle');
     }
 
     private function getFileIcon(array $iconsClasses, $mimeType)

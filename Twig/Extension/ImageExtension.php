@@ -1,9 +1,9 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\Twig\Extension;
+namespace Arthem\Bundle\FileBundle\Twig\Extension;
 
-use Arthem\Bundle\FileUploadBundle\Model\FileInterface;
-use Arthem\Bundle\FileUploadBundle\ImageManager;
+use Arthem\Bundle\FileBundle\Model\FileInterface;
+use Arthem\Bundle\FileBundle\ImageManager;
 
 class ImageExtension extends \Twig_Extension
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\DependencyInjection;
+namespace Arthem\Bundle\FileBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class ArthemFileUploadExtension extends Extension
+class ArthemFileExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -26,8 +26,8 @@ class ArthemFileUploadExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        $container->setParameter('arthem_fileupload.db_driver', $config['db_driver']);
-        $container->setParameter('arthem_fileupload.backend_type_' . $config['db_driver'], true);
+        $container->setParameter('arthem_file.db_driver', $config['db_driver']);
+        $container->setParameter('arthem_file.backend_type_' . $config['db_driver'], true);
 
         $this->mapModel($container, $config['model'], 'file');
 
@@ -36,7 +36,7 @@ class ArthemFileUploadExtension extends Extension
             'mongodb' => 'doctrine_mongodb',
         ];
         $dbDriverService = $drivers[$config['db_driver']];
-        $container->setAlias('arthem_fileupload.manager_registry', $dbDriverService);
+        $container->setAlias('arthem_file.manager_registry', $dbDriverService);
 
         $loader->load('services.yml');
         $loader->load('listener.yml');
@@ -59,7 +59,7 @@ class ArthemFileUploadExtension extends Extension
             throw new InvalidConfigurationException('LiipImagineBundle must be enabled in order to use image component.');
         }
 
-        $container->setParameter('arthem_fileupload.image.placeholders', $config['placeholders']);
+        $container->setParameter('arthem_file.image.placeholders', $config['placeholders']);
         $loader->load('image.yml');
 
         if ($config['crop']['enabled']) {
@@ -71,13 +71,13 @@ class ArthemFileUploadExtension extends Extension
     {
         $this->mapModel($container, $config['model'], 'image_crop');
 
-        $container->setParameter('arthem_fileupload.crop.linked_filters', $config['linked_filters']);
+        $container->setParameter('arthem_file.crop.linked_filters', $config['linked_filters']);
 
-        $def = $container->getDefinition('arthem_fileupload.doctrine.listener.mapping');
-        $def->addArgument('%arthem_fileupload.model.image_crop.class%');
-        $def->addArgument('%arthem_fileupload.model.image_crop.table%');
+        $def = $container->getDefinition('arthem_file.doctrine.listener.mapping');
+        $def->addArgument('%arthem_file.model.image_crop.class%');
+        $def->addArgument('%arthem_file.model.image_crop.table%');
 
-        $def = $container->getDefinition('arthem_fileupload.image_manager');
+        $def = $container->getDefinition('arthem_file.image_manager');
         $def->replaceArgument(2, true);
 
         $loader->load('image_crop.yml');
@@ -85,7 +85,7 @@ class ArthemFileUploadExtension extends Extension
 
     private function mapModel(ContainerBuilder $container, array $model, $field)
     {
-        $container->setParameter('arthem_fileupload.model.' . $field . '.class', $model[$field . '_class']);
-        $container->setParameter('arthem_fileupload.model.' . $field . '.table', $model[$field . '_table']);
+        $container->setParameter('arthem_file.model.' . $field . '.class', $model[$field . '_class']);
+        $container->setParameter('arthem_file.model.' . $field . '.table', $model[$field . '_table']);
     }
 }

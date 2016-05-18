@@ -1,20 +1,20 @@
 
 parameters:
-    arthem_fileupload.image_manager.class: Arthem\Bundle\FileUploadBundle\ImageManager
-    arthem_fileupload.twig.extension.image.class: Arthem\Bundle\FileUploadBundle\Twig\Extension\ImageExtension
+    arthem_file.image_manager.class: Arthem\Bundle\FileBundle\ImageManager
+    arthem_file.twig.extension.image.class: Arthem\Bundle\FileBundle\Twig\Extension\ImageExtension
 
 services:
-    arthem_fileupload.image_manager:
-        class: %arthem_fileupload.image_manager.class%
+    arthem_file.image_manager:
+        class: %arthem_file.image_manager.class%
         arguments:
             - @liip_imagine.cache.manager
-            - %arthem_fileupload.image.placeholders%
+            - %arthem_file.image.placeholders%
             - false
 
-    arthem_fileupload.twig.extension.image:
+    arthem_file.twig.extension.image:
         public: false
-        class: %arthem_fileupload.twig.extension.image.class%
+        class: %arthem_file.twig.extension.image.class%
         arguments:
-            - @arthem_fileupload.image_manager
+            - @arthem_file.image_manager
         tags:
             - { name: twig.extension, alias: arthem_image }

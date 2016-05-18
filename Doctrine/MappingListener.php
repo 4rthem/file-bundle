@@ -1,6 +1,6 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\Doctrine;
+namespace Arthem\Bundle\FileBundle\Doctrine;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;

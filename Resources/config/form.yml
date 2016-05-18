@@ -1,29 +1,29 @@
 parameters:
-    arthem_fileupload.form.file.type.class: Arthem\Bundle\FileUploadBundle\Form\Type\FileType
-    arthem_fileupload.form.default.origin_filter_name: large
-    arthem_fileupload.form.default.filter_name: small
-    arthem_fileupload.form.default.preview_width: 88
-    arthem_fileupload.form.default.preview_height: 88
+    arthem_file.form.file.type.class: Arthem\Bundle\FileBundle\Form\Type\FileType
+    arthem_file.form.default.origin_filter_name: large
+    arthem_file.form.default.filter_name: small
+    arthem_file.form.default.preview_width: 88
+    arthem_file.form.default.preview_height: 88
 
 services:
-    arthem_fileupload.form.file.type:
-        class: %arthem_fileupload.form.file.type.class%
+    arthem_file.form.file.type:
+        class: %arthem_file.form.file.type.class%
         arguments:
-            - %arthem_fileupload.model.file.class%
-            - @arthem_fileupload.manager_registry
-            - @arthem_fileupload.listener.uploadable
+            - %arthem_file.model.file.class%
+            - @arthem_file.manager_registry
+            - @arthem_file.listener.uploadable
             - @security.context
             - @router
             - @translator
-            - %arthem_fileupload.form.default.filter_name%
-            - %arthem_fileupload.form.default.origin_filter_name%
-            - %arthem_fileupload.form.default.preview_width%
-            - %arthem_fileupload.form.default.preview_height%
+            - %arthem_file.form.default.filter_name%
+            - %arthem_file.form.default.origin_filter_name%
+            - %arthem_file.form.default.preview_width%
+            - %arthem_file.form.default.preview_height%
         tags:
             - { name: form.type, alias: arthem_file }
 
-    arthem_fileupload.form.tinymce.plugin.arthem_image_upload:
-        class: Arthem\Bundle\FileUploadBundle\Form\TinyMce\ImageUploadExtension
+    arthem_file.form.tinymce.plugin.arthem_image_upload:
+        class: Arthem\Bundle\FileBundle\Form\TinyMce\ImageUploadExtension
         arguments:
             - @router
             - @security.csrf.token_manager

@@ -1,6 +1,6 @@
 <?php
 
-namespace Arthem\Bundle\FileUploadBundle\Model;
+namespace Arthem\Bundle\FileBundle\Model;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

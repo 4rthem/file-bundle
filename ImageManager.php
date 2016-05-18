@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle;
+namespace Arthem\Bundle\FileBundle;
 
 use Doctrine\Common\Util\ClassUtils;
-use Arthem\Bundle\FileUploadBundle\Model\FileInterface;
-use Arthem\Bundle\FileUploadBundle\Model\ImageInterface;
+use Arthem\Bundle\FileBundle\Model\FileInterface;
+use Arthem\Bundle\FileBundle\Model\ImageInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 class ImageManager

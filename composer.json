@@ -1,6 +1,6 @@
 {
-	"name": "arthem/fileupload-bundle",
-	"description": "The file upload bundle",
+	"name": "arthem/file-bundle",
+	"description": "The file bundle",
 	"type": "symfony-bundle",
 	"license": "MIT",
 	"require": {
@@ -11,7 +11,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Arthem\\Bundle\\FileUploadBundle\\": ""
+			"Arthem\\Bundle\\FileBundle\\": ""
 		}
 	}
 }

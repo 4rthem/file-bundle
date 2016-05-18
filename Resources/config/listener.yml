@@ -1,10 +1,10 @@
 parameters:
-    arthem_fileupload.listener.uploadable.class: Arthem\Bundle\FileUploadBundle\EventListener\UploadableListener
+    arthem_file.listener.uploadable.class: Arthem\Bundle\FileBundle\EventListener\UploadableListener
 
 services:
-    arthem_fileupload.listener.uploadable:
+    arthem_file.listener.uploadable:
         public: false
-        class: %arthem_fileupload.listener.uploadable.class%
+        class: %arthem_file.listener.uploadable.class%
         arguments:
             - @stof_doctrine_extensions.uploadable.manager
             #- @liip_imagine.cache.manager
@@ -12,11 +12,11 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-    arthem_fileupload.doctrine.listener.mapping:
+    arthem_file.doctrine.listener.mapping:
         parent: arthem_base.doctrine.listener.concrete_class
-        class: Arthem\Bundle\FileUploadBundle\Doctrine\MappingListener
+        class: Arthem\Bundle\FileBundle\Doctrine\MappingListener
         arguments:
-            - %arthem_fileupload.model.file.class%
-            - %arthem_fileupload.model.file.table%
+            - %arthem_file.model.file.class%
+            - %arthem_file.model.file.table%
         tags:
             - { name: doctrine.event_subscriber }

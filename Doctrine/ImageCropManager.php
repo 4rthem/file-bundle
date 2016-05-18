@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Doctrine;
+namespace Arthem\Bundle\FileBundle\Doctrine;
 
 use Doctrine\ORM\EntityManager;
 use Arthem\Bundle\BaseBundle\Exception\UnexpectedTypeException;
-use Arthem\Bundle\FileUploadBundle\Model\ImageCrop;
-use Arthem\Bundle\FileUploadBundle\Model\ImageInterface;
+use Arthem\Bundle\FileBundle\Model\ImageCrop;
+use Arthem\Bundle\FileBundle\Model\ImageInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
@@ -51,7 +51,7 @@ class ImageCropManager
             throw new NotFoundHttpException('Image not found');
         }
         if (!$image instanceof ImageInterface) {
-            throw new UnexpectedTypeException($image, ['Arthem\Bundle\FileUploadBundle\Model\ImageInterface']);
+            throw new UnexpectedTypeException($image, ['Arthem\Bundle\FileBundle\Model\ImageInterface']);
         }
 
         return $image;

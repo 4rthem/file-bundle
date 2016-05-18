@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Arthem\Bundle\FileUploadBundle\Controller;
+namespace Arthem\Bundle\FileBundle\Controller;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,7 +12,7 @@ class FileController extends Controller
 {
     public function uploadAction()
     {
-        $fileManager = $this->get('arthem_fileupload.file_upload_manager');
+        $fileManager = $this->get('arthem_file.file_upload_manager');
 
         return $fileManager->handleForm();
     }
@@ -20,10 +20,10 @@ class FileController extends Controller
     public function deleteAction(Request $request)
     {
         $id    = $request->get('id');
-        $class = $this->container->getParameter('arthem_fileupload.model.file.class');
+        $class = $this->container->getParameter('arthem_file.model.file.class');
 
         /** @var ObjectManager $om */
-        $om = $this->get('arthem_fileupload.manager_registry')->getManagerForClass($class);
+        $om = $this->get('arthem_file.manager_registry')->getManagerForClass($class);
 
         $file = $om->getRepository($class)->find($id);
         if (!$file) {
@@ -38,21 +38,21 @@ class FileController extends Controller
         }
 
         $translator = $this->get('translator');
-        $this->get('session')->getFlashBag()->add('success', $translator->trans('flashes.delete.success', [], 'ArthemFileUploadBundle'));
+        $this->get('session')->getFlashBag()->add('success', $translator->trans('flashes.delete.success', [], 'ArthemFileBundle'));
 
         return $this->redirect($request->headers->get('referer'));
     }
 
     public function imageCropAction(Request $request)
     {
-        $imageCropManager = $this->get('arthem_fileupload.image_crop_manager');
+        $imageCropManager = $this->get('arthem_file.image_crop_manager');
         $image            = $imageCropManager->getImage($request->get('id'));
 
         $r      = $request->request;
         $filter = $r->get('filter');
         $crop   = $imageCropManager->crop($image, $r->get('origin_filter'), $filter, $r->get('crop'));
 
-        $imageManager = $this->get('arthem_fileupload.image_manager');
+        $imageManager = $this->get('arthem_file.image_manager');
 
         return new JsonResponse([
             'url'  => $imageManager->getImagePath($image, $filter),

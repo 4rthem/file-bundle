@@ -1,4 +1,4 @@
-Arthem\Bundle\FileUploadBundle\Model\ImageCrop:
+Arthem\Bundle\FileBundle\Model\ImageCrop:
     type: mappedSuperclass
     id:
         id:

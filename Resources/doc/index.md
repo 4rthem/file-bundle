@@ -5,7 +5,7 @@ Update your routing:
 ```yaml
 # app/routing.yml
 arthem_file_upload:
-    resource: "@ArthemFileUploadBundle/Resources/config/routing.yml"
+    resource: "@ArthemFileBundle/Resources/config/routing.yml"
     prefix: /
 ```
 
@@ -17,13 +17,13 @@ Add the required assetic on your layout:
 	{% javascripts
 	'@ArthemBaseBundle/Resources/js/arthem.form.js'
 	...
-	'@ArthemFileUploadBundle/Resources/js/jquery-file-upload/jquery.ui.widget.js'
-	'@ArthemFileUploadBundle/Resources/js/jquery-file-upload/jquery.iframe-transport.js'
-	'@ArthemFileUploadBundle/Resources/js/jquery-file-upload/jquery.fileupload.js'
-	'@ArthemFileUploadBundle/Resources/js/jquery-file-upload/load-image.all.min.js'
-	'@ArthemFileUploadBundle/Resources/js/jquery-file-upload/jquery.fileupload-process.js'
-	'@ArthemFileUploadBundle/Resources/js/jquery-file-upload/jquery.fileupload-image.js'
-	'@ArthemFileUploadBundle/Resources/js/arthem.fileupload.js'
+	'@ArthemFileBundle/Resources/js/jquery-file-upload/jquery.ui.widget.js'
+	'@ArthemFileBundle/Resources/js/jquery-file-upload/jquery.iframe-transport.js'
+	'@ArthemFileBundle/Resources/js/jquery-file-upload/jquery.fileupload.js'
+	'@ArthemFileBundle/Resources/js/jquery-file-upload/load-image.all.min.js'
+	'@ArthemFileBundle/Resources/js/jquery-file-upload/jquery.fileupload-process.js'
+	'@ArthemFileBundle/Resources/js/jquery-file-upload/jquery.fileupload-image.js'
+	'@ArthemFileBundle/Resources/js/arthem.fileupload.js'
 	output='js/main.js' %}
 	<script src="{{ asset_url }}"></script>
 	{% endjavascripts %}
@@ -36,7 +36,7 @@ Add the required assetic on your layout:
 	{% stylesheets
 	...
 	'@ArthemBaseBundle/Resources/css/sass/arthem.form.scss'
-	'@ArthemFileUploadBundle/Resources/css/sass/file.scss'
+	'@ArthemFileBundle/Resources/css/sass/file.scss'
 	output='css/style.css' %}
 	<link rel="stylesheet" href="{{ asset_url }}">
 	{% endstylesheets %}
@@ -53,13 +53,13 @@ Example:
 <?php
 namespace Acme\DemoBundle\Entity;
 
-use Arthem\Bundle\FileUploadBundle\Model\File;
+use Arthem\Bundle\FileBundle\Model\File;
 
 class User
 {
 	/**
 	 * @var File
-	 * @ORM\ManyToOne(targetEntity="Arthem\Bundle\FileUploadBundle\Model\File", cascade={"persist", "remove"})
+	 * @ORM\ManyToOne(targetEntity="Arthem\Bundle\FileBundle\Model\File", cascade={"persist", "remove"})
 	 */
 	protected $file;
 
