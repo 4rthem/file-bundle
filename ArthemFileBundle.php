@@ -2,7 +2,7 @@
 
 namespace Arthem\Bundle\FileBundle;
 
-use Arthem\Bundle\BaseBundle\DependencyInjection\MappingRegistration;
+use Arthem\Bundle\FileBundle\DependencyInjection\MappingRegistration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

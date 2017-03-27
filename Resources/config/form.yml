@@ -1,5 +1,4 @@
 parameters:
-    arthem_file.form.file.type.class: Arthem\Bundle\FileBundle\Form\Type\FileType
     arthem_file.form.default.origin_filter_name: large
     arthem_file.form.default.filter_name: small
     arthem_file.form.default.preview_width: 88
@@ -7,25 +6,25 @@ parameters:
 
 services:
     arthem_file.form.file.type:
-        class: %arthem_file.form.file.type.class%
+        class: Arthem\Bundle\FileBundle\Form\Type\FileType
         arguments:
-            - %arthem_file.model.file.class%
-            - @arthem_file.manager_registry
-            - @arthem_file.listener.uploadable
-            - @security.context
-            - @router
-            - @translator
-            - %arthem_file.form.default.filter_name%
-            - %arthem_file.form.default.origin_filter_name%
-            - %arthem_file.form.default.preview_width%
-            - %arthem_file.form.default.preview_height%
+            - "%arthem_file.model.file.class%"
+            - "@arthem_file.manager_registry"
+            - "@arthem_file.listener.uploadable"
+            - "@security.authorization_checker"
+            - "@router"
+            - "@translator"
+            - "%arthem_file.form.default.filter_name%"
+            - "%arthem_file.form.default.origin_filter_name%"
+            - "%arthem_file.form.default.preview_width%"
+            - "%arthem_file.form.default.preview_height%"
         tags:
             - { name: form.type, alias: arthem_file }
 
     arthem_file.form.tinymce.plugin.arthem_image_upload:
         class: Arthem\Bundle\FileBundle\Form\TinyMce\ImageUploadExtension
         arguments:
-            - @router
-            - @security.csrf.token_manager
+            - "@router"
+            - "@security.csrf.token_manager"
         tags:
             - { name: arthem_base.tinymce_extension }

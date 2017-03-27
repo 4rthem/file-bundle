@@ -3,6 +3,7 @@
 
 namespace Arthem\Bundle\FileBundle\Controller;
 
+use Arthem\Bundle\FileBundle\Doctrine\ImageCropManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,6 +46,7 @@ class FileController extends Controller
 
     public function imageCropAction(Request $request)
     {
+    	/** @var ImageCropManager $imageCropManager */
         $imageCropManager = $this->get('arthem_file.image_crop_manager');
         $image            = $imageCropManager->getImage($request->get('id'));
 

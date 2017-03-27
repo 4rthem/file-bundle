@@ -9,9 +9,7 @@ Arthem\Bundle\FileBundle\Model\File:
             filenameGenerator: SHA1
     id:
         id:
-            type: integer
-            generator:
-                strategy: AUTO
+            type: string
     fields:
         path:
             type: string

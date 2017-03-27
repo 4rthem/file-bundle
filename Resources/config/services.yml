@@ -1,27 +1,28 @@
-parameters:
-    arthem_file.file_downloader.class: Arthem\Bundle\FileBundle\Downloader\FileDownloader
-    arthem_file.file_upload_manager.class: Arthem\Bundle\FileBundle\Model\FileUploadManager
-    arthem_file.http_client.class: Buzz\Client\Curl
-
 services:
     arthem_file.http_client:
         public: false
-        class: %arthem_file.http_client.class%
+        class: GuzzleHttp\Client
 
     arthem_file.file_downloader:
-        class: %arthem_file.file_downloader.class%
+        class: Arthem\Bundle\FileBundle\Downloader\FileDownloader
         arguments:
-            - @arthem_file.http_client
-            - @stof_doctrine_extensions.uploadable.manager
-            - %arthem_file.model.file.class%
+            - "@arthem_file.http_client"
+            - "@stof_doctrine_extensions.uploadable.manager"
+            - "%arthem_file.model.file.class%"
+
+    arthem_file.file_upload_manager.factory:
+        class: Arthem\Bundle\FileBundle\Model\FileUploadManagerFactory
+        arguments:
+            - "@doctrine"
+            - "@form.factory"
+            - "@arthem_file.image_manager"
+            - "@assets.packages"
+            - "@translator"
+            - "@request_stack"
 
     arthem_file.file_upload_manager:
-        class: %arthem_file.file_upload_manager.class%
+        class: Arthem\Bundle\FileBundle\Model\FileUploadManager
         scope: request
+        factory: "arthem_file.file_upload_manager.factory:createManager"
         arguments:
-            - @arthem_base.object_manager
-            - @form.factory
-            - @arthem_file.image_manager
-            - @templating.helper.assets
-            - @translator
-            - @request
+            - "%arthem_file.model.file.class%"

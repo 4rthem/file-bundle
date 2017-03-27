@@ -2,9 +2,7 @@ Arthem\Bundle\FileBundle\Model\ImageCrop:
     type: mappedSuperclass
     id:
         id:
-            type: integer
-            generator:
-                strategy: AUTO
+            type: string
     fields:
         filterName:
             type: string

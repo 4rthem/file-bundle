@@ -3,14 +3,14 @@
 
 namespace Arthem\Bundle\FileBundle\Model;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Arthem\Bundle\FileBundle\ImageManager;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Asset\PackageInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\Asset\PackageInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class FileUploadManager
@@ -28,16 +28,22 @@ class FileUploadManager
 
     protected $translator;
 
-    protected $request;
+    protected $requestStack;
 
-    function __construct(ObjectManager $om, FormFactoryInterface $formFactory, ImageManager $imageManager, PackageInterface $assetsHelper, TranslatorInterface $translator, Request $request)
+    function __construct(
+        ObjectManager $om,
+        FormFactoryInterface $formFactory,
+        ImageManager $imageManager,
+        PackageInterface $assetsHelper,
+        TranslatorInterface $translator,
+        RequestStack $requestStack)
     {
-        $this->om           = $om;
-        $this->formFactory  = $formFactory;
+        $this->om = $om;
+        $this->formFactory = $formFactory;
         $this->imageManager = $imageManager;
         $this->assetsHelper = $assetsHelper;
-        $this->translator   = $translator;
-        $this->request      = $request;
+        $this->translator = $translator;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -56,13 +62,13 @@ class FileUploadManager
 
     /**
      * @param \Closure|null $callback
-     * @param array         $fileOptions
+     * @param array $fileOptions
      * @return JsonResponse
      */
     public function handleForm(\Closure $callback = null, array $fileOptions = [])
     {
         $form = $this->getForm($fileOptions);
-        $form->handleRequest($this->request);
+        $form->handleRequest($this->requestStack->getCurrentRequest());
         if ($form->isValid()) {
             /** @var FileInterface $data */
             $data = $form->get('file')->getData();
@@ -94,12 +100,12 @@ class FileUploadManager
     public function getFileResponse(FileInterface $file)
     {
         if (strpos($file->getMimeType(), 'image/') === 0) {
-            if ($originFilterName = $this->request->get('origin_filter_name')) {
+            if ($originFilterName = $this->requestStack->getCurrentRequest()->get('origin_filter_name')) {
                 $fileUrl = $this->imageManager->getImagePath($file, $originFilterName);
             } else {
                 $fileUrl = $this->assetsHelper->getUrl($file->getPath());
             }
-            if ($filterName = $this->request->get('filter_name')) {
+            if ($filterName = $this->requestStack->get('filter_name')) {
                 $thumbnailUrl = $this->imageManager->getImagePath($file, $filterName);
             }
         } else {
@@ -107,7 +113,7 @@ class FileUploadManager
         }
 
         $file = [
-            'id'  => $file->getId(),
+            'id' => $file->getId(),
             'url' => $fileUrl
         ];
         if (isset($thumbnailUrl)) {

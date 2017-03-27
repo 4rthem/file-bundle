@@ -5,7 +5,7 @@ Update your routing:
 ```yaml
 # app/routing.yml
 arthem_file:
-    resource: "@ArthemFileBundle/Resources/config/routing.yml"
+    resource: "@ArthemFileBundle/Resources/config/routing/upload.yml"
     prefix: /
 ```
 

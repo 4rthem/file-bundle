@@ -20,19 +20,19 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('arthem_file');
 
-		$rootNode
-			->children()
-				->scalarNode('db_driver')->defaultValue('orm')->end()
-				->arrayNode('model')
-					->addDefaultsIfNotSet()
-					->children()
-						->scalarNode('file_class')->defaultValue('Arthem\Bundle\FileBundle\Model\File')->cannotBeEmpty()->end()
-						->scalarNode('file_table')->defaultValue('files')->cannotBeEmpty()->end()
-					->end()
-				->end()
-				->arrayNode('image')
+        $rootNode
+            ->children()
+                ->scalarNode('db_driver')->defaultValue('orm')->end()
+                ->arrayNode('model')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('file_class')->defaultValue('Arthem\Bundle\FileBundle\Model\File')->cannotBeEmpty()->end()
+                        ->scalarNode('file_table')->defaultNull()->end()
+                    ->end()
+                ->end()
+                ->arrayNode('image')
                     ->canBeDisabled()
-					->children()
+                    ->children()
                         ->arrayNode('crop')
                             ->canBeEnabled()
                             ->children()
@@ -53,17 +53,17 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-						->arrayNode('placeholders')
-							->defaultValue([])
-							->example('Acme\DemoBundle\Entity\User: { picture: "bundles/acmedemo/images/placeholders/user.png" }')
-							->prototype('array')
-								->prototype('scalar')
-								->end()
-							->end()
-						->end()
-					->end()
-				->end()
-			->end();
+                        ->arrayNode('placeholders')
+                            ->defaultValue([])
+                            ->example('Acme\DemoBundle\Entity\User: { picture: "bundles/acmedemo/images/placeholders/user.png" }')
+                            ->prototype('array')
+                                ->prototype('scalar')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }

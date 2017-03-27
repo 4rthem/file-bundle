@@ -1,22 +1,24 @@
-parameters:
-    arthem_file.listener.uploadable.class: Arthem\Bundle\FileBundle\EventListener\UploadableListener
 
 services:
     arthem_file.listener.uploadable:
         public: false
-        class: %arthem_file.listener.uploadable.class%
+        class: Arthem\Bundle\FileBundle\EventListener\UploadableListener
         arguments:
-            - @stof_doctrine_extensions.uploadable.manager
-            #- @liip_imagine.cache.manager
-            #- %liip_imagine.filter_sets%
+            - "@stof_doctrine_extensions.uploadable.manager"
+            #- "@liip_imagine.cache.manager"
+            #- "%liip_imagine.filter_sets%"
         tags:
             - { name: doctrine.event_subscriber }
 
+    arthem_file.doctrine.listener.concrete_class:
+        abstract: true
+        class: Arthem\Bundle\FileBundle\Doctrine\AbstractMappingListener
+
     arthem_file.doctrine.listener.mapping:
-        parent: arthem_base.doctrine.listener.concrete_class
+        parent: arthem_file.doctrine.listener.concrete_class
         class: Arthem\Bundle\FileBundle\Doctrine\MappingListener
         arguments:
-            - %arthem_file.model.file.class%
-            - %arthem_file.model.file.table%
+            - "%arthem_file.model.file.class%"
+            - "%arthem_file.model.file.table%"
         tags:
             - { name: doctrine.event_subscriber }

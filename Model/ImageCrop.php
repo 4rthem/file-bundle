@@ -2,10 +2,12 @@
 
 namespace Arthem\Bundle\FileBundle\Model;
 
+use Ramsey\Uuid\Uuid;
+
 class ImageCrop
 {
     /**
-     * @var mixed
+     * @var string
      */
     protected $id;
 
@@ -49,10 +51,12 @@ class ImageCrop
      */
     protected $updatedAt;
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    function __construct()
+    {
+        $this->id = Uuid::uuid4();
+    }
+
+    public function getId(): string
     {
         return $this->id;
     }

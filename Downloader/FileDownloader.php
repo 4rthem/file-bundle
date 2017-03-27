@@ -2,18 +2,17 @@
 
 namespace Arthem\Bundle\FileBundle\Downloader;
 
-use Buzz\Client\Curl;
-use Buzz\Message\Request;
-use Buzz\Message\Response;
 use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Gedmo\Uploadable\MimeType\MimeTypesExtensionsMap;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Request;
 use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileDownloader
 {
     /**
-     * @var Curl
+     * @var ClientInterface
      */
     private $client;
 
@@ -32,22 +31,20 @@ class FileDownloader
      */
     private $tempDir;
 
-    function __construct(Curl $client, UploadableManager $uploadableManager, $fileClass, $tempDir = null)
+    function __construct(ClientInterface $client, UploadableManager $uploadableManager, $fileClass, $tempDir = null)
     {
-        $this->client            = $client;
+        $this->client = $client;
         $this->uploadableManager = $uploadableManager;
-        $this->fileClass         = $fileClass;
-        $this->tempDir           = $tempDir ?: sys_get_temp_dir();
+        $this->fileClass = $fileClass;
+        $this->tempDir = $tempDir ?: sys_get_temp_dir();
     }
 
     public function download($uri)
     {
-        $request  = new Request('GET', $uri);
-        $response = new Response();
-        $this->client->setTimeout(50);
-        $this->client->send($request, $response, [CURLOPT_FOLLOWLOCATION => true]);
+        $request = new Request('GET', $uri);
+        $response = $this->client->send($request);
 
-        $mimeType = $response->getHeader('Content-Type');
+        $mimeType = $response->getHeader('Content-Type')[0];
 
         if (isset(MimeTypesExtensionsMap::$map[$mimeType])) {
             $extension = MimeTypesExtensionsMap::$map[$mimeType];
@@ -56,7 +53,7 @@ class FileDownloader
         }
 
         $tmpFile = $this->tempDir . '/' . uniqid() . '.' . $extension;
-        file_put_contents($tmpFile, $response->getContent());
+        file_put_contents($tmpFile, $response->getBody()->getContents());
 
         $fileInfo = new UploadedFile($tmpFile, basename($tmpFile), $mimeType, filesize($tmpFile), null, true);
 

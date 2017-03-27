@@ -4,12 +4,13 @@
 namespace Arthem\Bundle\FileBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File implements FileInterface, ImageInterface
 {
     /**
-     * @var mixed
+     * @var string
      */
     protected $id;
 
@@ -79,6 +80,7 @@ class File implements FileInterface, ImageInterface
     function __construct()
     {
         $this->crops = new ArrayCollection();
+        $this->id = Uuid::uuid4();
     }
 
     /**
@@ -97,10 +99,7 @@ class File implements FileInterface, ImageInterface
         return $this->extension;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }

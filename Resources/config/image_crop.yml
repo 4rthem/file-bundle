@@ -3,10 +3,10 @@ services:
     arthem_file.image_crop_manager:
         class: Arthem\Bundle\FileBundle\Doctrine\ImageCropManager
         arguments:
-            - @doctrine.orm.entity_manager
-            - %arthem_file.model.file.class%
-            - %arthem_file.model.image_crop.class%
-            - @liip_imagine.cache.manager
-            - @liip_imagine.data.manager
-            - @liip_imagine.filter.manager
-            - %arthem_file.crop.linked_filters%
+            - "@doctrine.orm.entity_manager"
+            - "%arthem_file.model.file.class%"
+            - "%arthem_file.model.image_crop.class%"
+            - "@liip_imagine.cache.manager"
+            - "@liip_imagine.data.manager"
+            - "@liip_imagine.filter.manager"
+            - "%arthem_file.crop.linked_filters%"
