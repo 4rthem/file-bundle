@@ -12,7 +12,7 @@ class MappingListener extends AbstractMappingListener
     protected $imageCropClass;
     protected $imageCropTable;
 
-    function __construct($fileClass, $fileTable, $imageCropClass = null, $imageCropTable = null)
+    public function __construct($fileClass, $fileTable, $imageCropClass = null, $imageCropTable = null)
     {
         $this->fileClass = $fileClass;
         $this->fileTable = $fileTable;

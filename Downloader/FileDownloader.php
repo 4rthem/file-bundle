@@ -31,7 +31,7 @@ class FileDownloader
      */
     private $tempDir;
 
-    function __construct(ClientInterface $client, UploadableManager $uploadableManager, $fileClass, $tempDir = null)
+    public function __construct(ClientInterface $client, UploadableManager $uploadableManager, $fileClass, $tempDir = null)
     {
         $this->client = $client;
         $this->uploadableManager = $uploadableManager;
@@ -52,13 +52,13 @@ class FileDownloader
             $extension = 'unknown';
         }
 
-        $tmpFile = $this->tempDir . '/' . uniqid() . '.' . $extension;
+        $tmpFile = $this->tempDir.'/'.uniqid().'.'.$extension;
         file_put_contents($tmpFile, $response->getBody()->getContents());
 
         $fileInfo = new UploadedFile($tmpFile, basename($tmpFile), $mimeType, filesize($tmpFile), null, true);
 
         /** @var FileInterface $file */
-        $file = new $this->fileClass;
+        $file = new $this->fileClass();
         $this->uploadableManager->markEntityToUpload($file, $fileInfo);
 
         return $file;

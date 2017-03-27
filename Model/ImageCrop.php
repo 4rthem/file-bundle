@@ -51,7 +51,7 @@ class ImageCrop
      */
     protected $updatedAt;
 
-    function __construct()
+    public function __construct()
     {
         $this->id = Uuid::uuid4();
     }
@@ -63,6 +63,7 @@ class ImageCrop
 
     /**
      * @param FileInterface $file
+     *
      * @return $this
      */
     public function setFile(FileInterface $file)
@@ -98,6 +99,7 @@ class ImageCrop
 
     /**
      * @param string $filterName
+     *
      * @return $this
      */
     public function setFilterName($filterName)
@@ -117,6 +119,7 @@ class ImageCrop
 
     /**
      * @param float $left
+     *
      * @return $this
      */
     public function setLeft($left)
@@ -136,6 +139,7 @@ class ImageCrop
 
     /**
      * @param float $top
+     *
      * @return $this
      */
     public function setTop($top)
@@ -155,6 +159,7 @@ class ImageCrop
 
     /**
      * @param float $height
+     *
      * @return $this
      */
     public function setHeight($height)
@@ -174,6 +179,7 @@ class ImageCrop
 
     /**
      * @param float $width
+     *
      * @return $this
      */
     public function setWidth($width)

@@ -24,10 +24,10 @@ class RegisterMappingsPass implements CompilerPassInterface
 
     public function __construct($driver, $driverPattern, $namespaces, $enabledParameter, $fallbackManagerParameter)
     {
-        $this->driver                   = $driver;
-        $this->driverPattern            = $driverPattern;
-        $this->namespaces               = $namespaces;
-        $this->enabledParameter         = $enabledParameter;
+        $this->driver = $driver;
+        $this->driverPattern = $driverPattern;
+        $this->namespaces = $namespaces;
+        $this->enabledParameter = $enabledParameter;
         $this->fallbackManagerParameter = $fallbackManagerParameter;
     }
 
@@ -43,7 +43,7 @@ class RegisterMappingsPass implements CompilerPassInterface
         }
 
         $chainDriverDefService = $this->getChainDriverServiceName($container);
-        $chainDriverDef        = $container->getDefinition($chainDriverDefService);
+        $chainDriverDef = $container->getDefinition($chainDriverDefService);
         foreach ($this->namespaces as $namespace) {
             $chainDriverDef->addMethodCall('addDriver', [$this->driver, $namespace]);
         }
@@ -51,8 +51,10 @@ class RegisterMappingsPass implements CompilerPassInterface
 
     /**
      * @param ContainerBuilder $container
-     * @return string
+     *
      * @throws ParameterNotFoundException
+     *
+     * @return string
      */
     protected function getChainDriverServiceName(ContainerBuilder $container)
     {
@@ -71,27 +73,27 @@ class RegisterMappingsPass implements CompilerPassInterface
     public static function createOrmMappingDriver(array $mappings, $bundleShortName)
     {
         $arguments = [$mappings, '.orm.yml'];
-        $locator   = new Definition('Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator', $arguments);
-        $driver    = new Definition('Doctrine\ORM\Mapping\Driver\YamlDriver', [$locator]);
+        $locator = new Definition('Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator', $arguments);
+        $driver = new Definition('Doctrine\ORM\Mapping\Driver\YamlDriver', [$locator]);
 
-        return new RegisterMappingsPass($driver, 'doctrine.orm.%s_metadata_driver', $mappings, $bundleShortName . '.backend_type_orm', 'doctrine.default_entity_manager');
+        return new self($driver, 'doctrine.orm.%s_metadata_driver', $mappings, $bundleShortName.'.backend_type_orm', 'doctrine.default_entity_manager');
     }
 
     public static function createMongoDBMappingDriver($mappings, $bundleShortName)
     {
         $arguments = [$mappings, '.mongodb.yml'];
-        $locator   = new Definition('Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator', $arguments);
-        $driver    = new Definition('Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver', [$locator]);
+        $locator = new Definition('Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator', $arguments);
+        $driver = new Definition('Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver', [$locator]);
 
-        return new RegisterMappingsPass($driver, 'doctrine_mongodb.odm.%s_metadata_driver', $mappings, $bundleShortName . '.backend_type_mongodb', 'doctrine_mongodb.odm.default_document_manager');
+        return new self($driver, 'doctrine_mongodb.odm.%s_metadata_driver', $mappings, $bundleShortName.'.backend_type_mongodb', 'doctrine_mongodb.odm.default_document_manager');
     }
 
     public static function createCouchDBMappingDriver($mappings, $bundleShortName)
     {
         $arguments = [$mappings, '.couchdb.yml'];
-        $locator   = new Definition('Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator', $arguments);
-        $driver    = new Definition('Doctrine\ODM\CouchDB\Mapping\Driver\YamlDriver', [$locator]);
+        $locator = new Definition('Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator', $arguments);
+        $driver = new Definition('Doctrine\ODM\CouchDB\Mapping\Driver\YamlDriver', [$locator]);
 
-        return new RegisterMappingsPass($driver, 'doctrine_couchdb.odm.%s_metadata_driver', $mappings, $bundleShortName . '.backend_type_couchdb', 'doctrine_couchdb.default_document_manager');
+        return new self($driver, 'doctrine_couchdb.odm.%s_metadata_driver', $mappings, $bundleShortName.'.backend_type_couchdb', 'doctrine_couchdb.default_document_manager');
     }
 }

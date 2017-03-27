@@ -5,10 +5,10 @@ namespace Arthem\Bundle\FileBundle\Form\Type;
 use Arthem\Bundle\FileBundle\EventListener\UploadableListener;
 use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Arthem\Bundle\FileBundle\Validator\File;
-use Symfony\Component\Form\Extension\Core\Type\FileType as BaseFileType;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType as BaseFileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -85,8 +85,7 @@ class FileType extends AbstractType
         $defaultOriginFilterName,
         $defaultPreviewWidth,
         $defaultPreviewHeight
-    )
-    {
+    ) {
         $this->class = $class;
         $this->om = $registry->getManagerForClass($class);
         $this->uploadableListener = $uploadableListener;
@@ -118,7 +117,7 @@ class FileType extends AbstractType
                     'mimeTypes' => $options['accept'],
                     'multiple' => $options['multiple'],
                 ]),
-            ]
+            ],
         ]);
         $idInput = $builder->create('id', HiddenType::class, [
             'mapped' => false,
@@ -136,7 +135,7 @@ class FileType extends AbstractType
             $handleFile = function ($data) use (&$options, $token) {
                 if ($data instanceof UploadedFile) {
                     /** @var FileInterface $file */
-                    $file = new $this->class;
+                    $file = new $this->class();
                     $file->setFile($data);
                     $file->setToken($token);
 
@@ -297,11 +296,11 @@ class FileType extends AbstractType
     }
 
     /**
-     * Pass the file URL to the view
+     * Pass the file URL to the view.
      *
-     * @param FormView $view
+     * @param FormView      $view
      * @param FormInterface $form
-     * @param array $options
+     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -324,7 +323,7 @@ class FileType extends AbstractType
         $jsOptions = [];
         if ($options['ajax']) {
             $rootForm = $form->getRoot();
-            $token = (string)$rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
+            $token = (string) $rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
 
             $jsOptions = [
                 'ajax' => true,
@@ -393,7 +392,7 @@ class FileType extends AbstractType
         }
 
         foreach ($iconsClasses as $mask => $iconsClass) {
-            if (preg_match('#^' . $iconsClass . '$#', $mimeType)) {
+            if (preg_match('#^'.$iconsClass.'$#', $mimeType)) {
                 return $iconsClass;
             }
         }

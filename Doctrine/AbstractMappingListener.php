@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Doctrine;
 
 use Doctrine\Common\EventSubscriber;

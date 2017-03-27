@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Validator;
 
 use Symfony\Component\Validator\Constraints\File as BaseFile;
@@ -13,4 +12,4 @@ class File extends BaseFile
     public $uploadIniSizeErrorMessage = 'arthem_file.file.too_large';
 
     public $multiple = false;
-} 
+}

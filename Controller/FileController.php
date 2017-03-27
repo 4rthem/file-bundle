@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Controller;
 
 use Arthem\Bundle\FileBundle\Doctrine\ImageCropManager;
@@ -20,7 +19,7 @@ class FileController extends Controller
 
     public function deleteAction(Request $request)
     {
-        $id    = $request->get('id');
+        $id = $request->get('id');
         $class = $this->container->getParameter('arthem_file.model.file.class');
 
         /** @var ObjectManager $om */
@@ -46,24 +45,24 @@ class FileController extends Controller
 
     public function imageCropAction(Request $request)
     {
-    	/** @var ImageCropManager $imageCropManager */
+        /** @var ImageCropManager $imageCropManager */
         $imageCropManager = $this->get('arthem_file.image_crop_manager');
-        $image            = $imageCropManager->getImage($request->get('id'));
+        $image = $imageCropManager->getImage($request->get('id'));
 
-        $r      = $request->request;
+        $r = $request->request;
         $filter = $r->get('filter');
-        $crop   = $imageCropManager->crop($image, $r->get('origin_filter'), $filter, $r->get('crop'));
+        $crop = $imageCropManager->crop($image, $r->get('origin_filter'), $filter, $r->get('crop'));
 
         $imageManager = $this->get('arthem_file.image_manager');
 
         return new JsonResponse([
-            'url'  => $imageManager->getImagePath($image, $filter),
+            'url' => $imageManager->getImagePath($image, $filter),
             'crop' => [
-                'l' => (float)$crop->getLeft(),
-                't' => (float)$crop->getTop(),
-                'w' => (float)$crop->getWidth(),
-                'h' => (float)$crop->getHeight(),
-            ]
+                'l' => (float) $crop->getLeft(),
+                't' => (float) $crop->getTop(),
+                'w' => (float) $crop->getWidth(),
+                'h' => (float) $crop->getHeight(),
+            ],
         ]);
     }
-} 
+}

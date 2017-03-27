@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Validator;
 
 use Arthem\Bundle\FileBundle\Model\FileInterface;

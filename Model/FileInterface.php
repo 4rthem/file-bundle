@@ -19,49 +19,50 @@ interface FileInterface
     /**
      * @return UploadedFile
      */
-    function getFile();
+    public function getFile();
 
     /**
      * @return string
      */
-    function getPath();
+    public function getPath();
 
     /**
      * @param string $path
      */
-    function setPath($path);
+    public function setPath($path);
 
     /**
-     * @return boolean
+     * @return bool
      */
-    function isPlaceholder();
+    public function isPlaceholder();
 
     /**
-     * @param boolean $isPlaceholder
+     * @param bool $isPlaceholder
      */
-    function setPlaceholder($isPlaceholder);
+    public function setPlaceholder($isPlaceholder);
 
     /**
      * @param string $mimeType
      */
-    function setMimeType($mimeType);
+    public function setMimeType($mimeType);
 
     /**
      * @return string
      */
-    function getMimeType();
+    public function getMimeType();
 
     /**
      * Security for file upload
-     * Ensure that only the uploader can attach the File to an object
+     * Ensure that only the uploader can attach the File to an object.
      *
      * @return string
      */
-    function getToken();
+    public function getToken();
 
     /**
      * @param string $token
+     *
      * @return $this
      */
-    function setToken($token);
+    public function setToken($token);
 }

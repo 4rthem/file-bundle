@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle;
 
-use Doctrine\Common\Util\ClassUtils;
 use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Arthem\Bundle\FileBundle\Model\ImageInterface;
+use Doctrine\Common\Util\ClassUtils;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 class ImageManager
@@ -24,20 +23,20 @@ class ImageManager
 
     private $cache = [];
 
-    function __construct(CacheManager $cacheManager, array $placeholders, $cropActive = false)
+    public function __construct(CacheManager $cacheManager, array $placeholders, $cropActive = false)
     {
         $this->cacheManager = $cacheManager;
         $this->placeholders = $placeholders;
-        $this->cropActive   = $cropActive;
+        $this->cropActive = $cropActive;
     }
 
     public function imagePath($object, $field, $filter)
     {
-        $key = spl_object_hash($object) . '.' . $field . '.' . $filter;
+        $key = spl_object_hash($object).'.'.$field.'.'.$filter;
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
-        $image = $object->{'get' . ucfirst($field)}();
+        $image = $object->{'get'.ucfirst($field)}();
         if ($image instanceof FileInterface) {
             $path = $image->getPath();
         } else {
@@ -50,7 +49,7 @@ class ImageManager
 
         $this->cache[$key] = $this->cacheManager->getBrowserPath($path, $filter);
         if ($this->cropActive && $image instanceof ImageInterface && (null !== $cropDate = $image->getCropDate($filter))) {
-            $this->cache[$key] .= '?' . $cropDate;
+            $this->cache[$key] .= '?'.$cropDate;
         }
 
         return $this->cache[$key];
@@ -60,6 +59,7 @@ class ImageManager
      * @param object|string $class
      * @param string        $field
      * @param string        $filter
+     *
      * @return string
      */
     public function imagePlaceholder($class, $field, $filter)
@@ -68,7 +68,7 @@ class ImageManager
             $class = get_class($class);
         }
         $objectClass = ClassUtils::getRealClass($class);
-        $key         = $objectClass . '.' . $field . '.' . $filter . '.placeholder';
+        $key = $objectClass.'.'.$field.'.'.$filter.'.placeholder';
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
@@ -83,7 +83,7 @@ class ImageManager
 
     public function getImagePath(FileInterface $image, $filter)
     {
-        $key = '__' . spl_object_hash($image) . '.' . '.' . $filter;
+        $key = '__'.spl_object_hash($image).'.'.'.'.$filter;
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
@@ -91,9 +91,9 @@ class ImageManager
 
         $this->cache[$key] = $this->cacheManager->getBrowserPath($path, $filter);
         if ($this->cropActive && $image instanceof ImageInterface && (null !== $cropDate = $image->getCropDate($filter))) {
-            $this->cache[$key] .= '?' . $cropDate;
+            $this->cache[$key] .= '?'.$cropDate;
         }
 
         return $this->cache[$key];
     }
-} 
+}

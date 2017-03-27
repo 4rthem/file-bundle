@@ -1,12 +1,11 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Doctrine;
 
-use Doctrine\ORM\EntityManager;
 use Arthem\Bundle\BaseBundle\Exception\UnexpectedTypeException;
 use Arthem\Bundle\FileBundle\Model\ImageCrop;
 use Arthem\Bundle\FileBundle\Model\ImageInterface;
+use Doctrine\ORM\EntityManager;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
@@ -29,19 +28,20 @@ class ImageCropManager
 
     protected $linkedFilters;
 
-    function __construct(EntityManager $em, $fileClass, $imageCropClass, CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, array $linkedFilters = [])
+    public function __construct(EntityManager $em, $fileClass, $imageCropClass, CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, array $linkedFilters = [])
     {
-        $this->em             = $em;
-        $this->fileClass      = $fileClass;
+        $this->em = $em;
+        $this->fileClass = $fileClass;
         $this->imageCropClass = $imageCropClass;
-        $this->cacheManager   = $cacheManager;
-        $this->dataManager    = $dataManager;
-        $this->filterManager  = $filterManager;
-        $this->linkedFilters  = $linkedFilters;
+        $this->cacheManager = $cacheManager;
+        $this->dataManager = $dataManager;
+        $this->filterManager = $filterManager;
+        $this->linkedFilters = $linkedFilters;
     }
 
     /**
      * @param mixed $id
+     *
      * @return ImageInterface
      */
     public function getImage($id)
@@ -62,20 +62,21 @@ class ImageCropManager
      * @param string         $originFilter
      * @param string         $filter
      * @param array          $cropCoordinates
+     *
      * @return ImageCrop
      */
     public function crop(ImageInterface $image, $originFilter, $filter, array $cropCoordinates)
     {
-        $width  = (float)$cropCoordinates['w'];
-        $height = (float)$cropCoordinates['h'];
-        $top    = (float)$cropCoordinates['y'];
-        $left   = (float)$cropCoordinates['x'];
+        $width = (float) $cropCoordinates['w'];
+        $height = (float) $cropCoordinates['h'];
+        $top = (float) $cropCoordinates['y'];
+        $left = (float) $cropCoordinates['x'];
 
         $binary = $this->dataManager->find($originFilter, $image->getPath());
 
         $filterConfiguration = $this->filterManager->getFilterConfiguration();
-        $originFilterConfig  = $filterConfiguration->get($originFilter);
-        $filterConfig        = $filterConfiguration->get($filter);
+        $originFilterConfig = $filterConfiguration->get($originFilter);
+        $filterConfig = $filterConfiguration->get($filter);
 
         if (!isset($originFilterConfig['filters']['thumbnail']['size'])) {
             throw new \InvalidArgumentException('Missing thumbnail filter for origin');
@@ -94,7 +95,7 @@ class ImageCropManager
                 $image->setCropDate($cascadeFilter, time());
             }
         }
-        
+
         $this->makeCrop($image, $binary, $filter, $originFilter, $left, $top, $width, $height);
 
         $crops[] = $crop = $this->getCrop($image, $filter);
@@ -122,9 +123,9 @@ class ImageCropManager
             'filters' => [
                 'crop' => [
                     'start' => [$left, $top],
-                    'size'  => [$width, $height],
+                    'size' => [$width, $height],
                 ],
-            ]
+            ],
         ]);
         $filteredBinary = $this->filterManager->applyFilter($filteredBinary, $filter);
         $this->cacheManager->remove($image->getPath(), $filter);
@@ -135,12 +136,12 @@ class ImageCropManager
     {
         $crop = $this->em->getRepository($this->imageCropClass)->findOneBy([
             'filterName' => $filter,
-            'file'       => $image->getId(),
+            'file' => $image->getId(),
         ]);
 
         if (null === $crop) {
             /** @var ImageCrop $crop */
-            $crop = new $this->imageCropClass;
+            $crop = new $this->imageCropClass();
             $crop->setFile($image)
                 ->setFilterName($filter);
         }

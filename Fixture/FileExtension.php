@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileExtension extends FixtureExtension
 {
-    function __construct($webDir)
+    public function __construct($webDir)
     {
         chdir($webDir);
     }
@@ -23,10 +23,10 @@ class FileExtension extends FixtureExtension
 
     public function transformUpload($value, FixtureData $context)
     {
-        $mimeTypeGuesser = new MimeTypeGuesser;
+        $mimeTypeGuesser = new MimeTypeGuesser();
 
         $currentDirectory = dirname($context->getSrc());
-        $path             = $currentDirectory . '/' . $value;
+        $path = $currentDirectory.'/'.$value;
         if (!$src = realpath($path)) {
             throw new \InvalidArgumentException(sprintf('File "%s" does not exist', $path));
         }

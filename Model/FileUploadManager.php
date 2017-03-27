@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Model;
 
 use Arthem\Bundle\FileBundle\ImageManager;
@@ -30,7 +29,7 @@ class FileUploadManager
 
     protected $requestStack;
 
-    function __construct(
+    public function __construct(
         ObjectManager $om,
         FormFactoryInterface $formFactory,
         ImageManager $imageManager,
@@ -48,6 +47,7 @@ class FileUploadManager
 
     /**
      * @param array $fileOptions
+     *
      * @return Form
      */
     public function getForm(array $fileOptions = [])
@@ -62,7 +62,8 @@ class FileUploadManager
 
     /**
      * @param \Closure|null $callback
-     * @param array $fileOptions
+     * @param array         $fileOptions
+     *
      * @return JsonResponse
      */
     public function handleForm(\Closure $callback = null, array $fileOptions = [])
@@ -114,7 +115,7 @@ class FileUploadManager
 
         $file = [
             'id' => $file->getId(),
-            'url' => $fileUrl
+            'url' => $fileUrl,
         ];
         if (isset($thumbnailUrl)) {
             $file['thumbnail_url'] = $thumbnailUrl;

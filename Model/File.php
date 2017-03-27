@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +15,7 @@ class File implements FileInterface, ImageInterface
 
     /**
      * Uploaded file info from $_FILES
-     * Not mapped with Doctrine
+     * Not mapped with Doctrine.
      *
      * @var array
      */
@@ -68,7 +67,7 @@ class File implements FileInterface, ImageInterface
     protected $size;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $isPlaceholder;
 
@@ -77,7 +76,7 @@ class File implements FileInterface, ImageInterface
      */
     protected $createdAt;
 
-    function __construct()
+    public function __construct()
     {
         $this->crops = new ArrayCollection();
         $this->id = Uuid::uuid4();
@@ -161,7 +160,7 @@ class File implements FileInterface, ImageInterface
             return $this->path;
         }
 
-        return 'uploads/' . ($this->context ? $this->context . '/' : '') . date('Y/m/d') . '/';
+        return 'uploads/'.($this->context ? $this->context.'/' : '').date('Y/m/d').'/';
     }
 
     public function setPath($path)
@@ -185,7 +184,7 @@ class File implements FileInterface, ImageInterface
     public function callbackMethod(array $file)
     {
         $this->originalFilename = $file['origFileName'];
-        $this->extension        = substr($file['fileExtension'], 1);
+        $this->extension = substr($file['fileExtension'], 1);
     }
 
     public function isPlaceholder()
@@ -200,20 +199,21 @@ class File implements FileInterface, ImageInterface
 
     /**
      * Security for file upload
-     * Ensure that only the uploader can attach the File to an object
+     * Ensure that only the uploader can attach the File to an object.
      *
      * @return string
      */
-    function getToken()
+    public function getToken()
     {
         return $this->token;
     }
 
     /**
      * @param string $token
+     *
      * @return $this
      */
-    function setToken($token)
+    public function setToken($token)
     {
         $this->token = $token;
 
@@ -222,6 +222,7 @@ class File implements FileInterface, ImageInterface
 
     /**
      * @param string $filterName
+     *
      * @return ImageCrop
      */
     public function getImageCrop($filterName)
@@ -248,9 +249,10 @@ class File implements FileInterface, ImageInterface
     }
 
     /**
-     * Used to return path to the ImageValidator
+     * Used to return path to the ImageValidator.
      *
      * @see \Symfony\Component\Validator\Constraints\ImageValidator
+     *
      * @return string
      */
     public function __toString()
@@ -261,4 +263,4 @@ class File implements FileInterface, ImageInterface
 
         return $this->path ?: '';
     }
-} 
+}

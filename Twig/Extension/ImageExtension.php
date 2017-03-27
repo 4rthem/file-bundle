@@ -2,8 +2,8 @@
 
 namespace Arthem\Bundle\FileBundle\Twig\Extension;
 
-use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Arthem\Bundle\FileBundle\ImageManager;
+use Arthem\Bundle\FileBundle\Model\FileInterface;
 
 class ImageExtension extends \Twig_Extension
 {

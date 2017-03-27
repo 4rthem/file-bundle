@@ -2,9 +2,9 @@
 
 namespace Arthem\Bundle\FileBundle\EventListener;
 
+use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

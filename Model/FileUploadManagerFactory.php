@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Model;
 
 use Arthem\Bundle\FileBundle\ImageManager;
@@ -42,8 +41,7 @@ class FileUploadManagerFactory
         PackageInterface $assetsHelper,
         TranslatorInterface $translator,
         RequestStack $requestStack
-    )
-    {
+    ) {
         $this->doctrine = $doctrine;
         $this->formFactory = $formFactory;
         $this->imageManager = $imageManager;
@@ -63,5 +61,4 @@ class FileUploadManagerFactory
             $this->requestStack
         );
     }
-
 }
