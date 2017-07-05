@@ -5,8 +5,6 @@ services:
         class: Arthem\Bundle\FileBundle\EventListener\UploadableListener
         arguments:
             - "@stof_doctrine_extensions.uploadable.manager"
-            #- "@liip_imagine.cache.manager"
-            #- "%liip_imagine.filter_sets%"
         tags:
             - { name: doctrine.event_subscriber }
 

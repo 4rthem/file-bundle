@@ -2,11 +2,13 @@
 
 namespace Arthem\Bundle\FileBundle\DependencyInjection;
 
+use Arthem\Bundle\FileBundle\Storage\GaufretteStorageStrategy;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -46,10 +48,26 @@ class ArthemFileExtension extends Extension
             $this->loadImage($container, $loader, $config['image']);
         }
 
+        if ($config['storage']['enabled']) {
+            $this->loadStorage($container, $loader, $config['storage']);
+        }
+
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ArthemFixturesBundle'])) {
             $loader->load('fixture.yml');
         }
+    }
+
+    public function loadStorage(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    {
+        $definition = $container->getDefinition('arthem_file.listener.uploadable');
+        $loader->load('storage.yml');
+        $definition->addMethodCall('setStorageAdapter', [new Reference(GaufretteStorageStrategy::class)]);
+
+        $gaufretteDef = $container->getDefinition(GaufretteStorageStrategy::class);
+        $gaufretteDef->setArgument(0, new Reference(
+            sprintf('oneup_flysystem.%s_filesystem', $config['gaufrette']['adapter'])
+        ));
     }
 
     public function loadImage(ContainerBuilder $container, LoaderInterface $loader, array $config)

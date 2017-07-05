@@ -1,0 +1,6 @@
+
+services:
+    _defaults:
+        autowire: true
+
+    Arthem\Bundle\FileBundle\Storage\GaufretteStorageStrategy: ~
