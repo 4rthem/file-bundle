@@ -22,7 +22,6 @@ services:
 
     arthem_file.file_upload_manager:
         class: Arthem\Bundle\FileBundle\Model\FileUploadManager
-        scope: request
         factory: "arthem_file.file_upload_manager.factory:createManager"
         arguments:
             - "%arthem_file.model.file.class%"

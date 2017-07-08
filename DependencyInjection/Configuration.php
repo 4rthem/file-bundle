@@ -2,6 +2,8 @@
 
 namespace Arthem\Bundle\FileBundle\DependencyInjection;
 
+use Arthem\Bundle\FileBundle\Model\File;
+use Arthem\Bundle\FileBundle\Model\ImageCrop;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -26,7 +28,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('model')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('file_class')->defaultValue('Arthem\Bundle\FileBundle\Model\File')->cannotBeEmpty()->end()
+                        ->scalarNode('file_class')->defaultValue(File::class)->cannotBeEmpty()->end()
                         ->scalarNode('file_table')->defaultNull()->end()
                     ->end()
                 ->end()
@@ -50,7 +52,7 @@ class Configuration implements ConfigurationInterface
                                 ->arrayNode('model')
                                     ->addDefaultsIfNotSet()
                                     ->children()
-                                        ->scalarNode('image_crop_class')->defaultValue('Arthem\Bundle\FileBundle\Model\ImageCrop')->cannotBeEmpty()->end()
+                                        ->scalarNode('image_crop_class')->defaultValue(ImageCrop::class)->cannotBeEmpty()->end()
                                         ->scalarNode('image_crop_table')->defaultValue('image_crops')->cannotBeEmpty()->end()
                                     ->end()
                                 ->end()
