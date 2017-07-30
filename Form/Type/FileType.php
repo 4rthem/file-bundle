@@ -399,4 +399,9 @@ class FileType extends AbstractType
 
         return null;
     }
+
+    public function getBlockPrefix()
+    {
+        return 'arthem_file';
+    }
 }

@@ -31,8 +31,10 @@
         {{ form_errors(form.file) }}
 
         <script>
-            $(function () {
-                $('#{{ id }}').arthemFileUpload({{ js_options|raw }});
+            document.addEventListener("DOMContentLoaded", function() {
+                $(function () {
+                    $('#{{ id }}').arthemFileUpload({{ js_options|raw }});
+                });
             });
         </script>
     {% endspaceless %}
