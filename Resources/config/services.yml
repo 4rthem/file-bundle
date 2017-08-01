@@ -18,10 +18,9 @@ services:
             - "@arthem_file.image_manager"
             - "@assets.packages"
             - "@translator"
-            - "@request_stack"
 
     arthem_file.file_upload_manager:
         class: Arthem\Bundle\FileBundle\Model\FileUploadManager
-        factory: "arthem_file.file_upload_manager.factory:createManager"
+        factory: "arthem_file.file_upload_manager.factory:createManagerFor"
         arguments:
             - "%arthem_file.model.file.class%"

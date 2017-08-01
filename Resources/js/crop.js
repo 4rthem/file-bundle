@@ -388,4 +388,6 @@ var CROP = function () {
 			})
 		}.call(this, n)
 	}
-})($)
+})($);
+
+module.exports = CROP;

@@ -2,14 +2,15 @@
 
 namespace Arthem\Bundle\FileBundle\Model;
 
+use Arthem\Bundle\FileBundle\Form\Type\FileType;
 use Arthem\Bundle\FileBundle\ImageManager;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Asset\PackageInterface;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class FileUploadManager
@@ -27,50 +28,45 @@ class FileUploadManager
 
     protected $translator;
 
-    protected $requestStack;
-
     public function __construct(
         ObjectManager $om,
         FormFactoryInterface $formFactory,
         ImageManager $imageManager,
-        PackageInterface $assetsHelper,
-        TranslatorInterface $translator,
-        RequestStack $requestStack)
+        Packages $assetsHelper,
+        TranslatorInterface $translator
+    )
     {
         $this->om = $om;
         $this->formFactory = $formFactory;
         $this->imageManager = $imageManager;
         $this->assetsHelper = $assetsHelper;
         $this->translator = $translator;
-        $this->requestStack = $requestStack;
     }
 
     /**
      * @param array $fileOptions
      *
-     * @return Form
+     * @return FormInterface
      */
     public function getForm(array $fileOptions = [])
     {
-        $formBuilder = $this->formFactory->createNamedBuilder('file', 'form', null, [
-            'intention' => 'file',
-        ]);
-        $formBuilder->add('file', 'arthem_file', $fileOptions);
+        $formBuilder = $this->formFactory->createNamedBuilder('file', FormType::class);
+        $formBuilder->add('file', FileType::class, $fileOptions);
 
         return $formBuilder->getForm();
     }
 
     /**
+     * @param Request $request
      * @param \Closure|null $callback
-     * @param array         $fileOptions
-     *
+     * @param array $fileOptions
      * @return JsonResponse
      */
-    public function handleForm(\Closure $callback = null, array $fileOptions = [])
+    public function handleForm(Request $request, \Closure $callback = null, array $fileOptions = [])
     {
         $form = $this->getForm($fileOptions);
-        $form->handleRequest($this->requestStack->getCurrentRequest());
-        if ($form->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var FileInterface $data */
             $data = $form->get('file')->getData();
             if ($callback) {
@@ -79,7 +75,7 @@ class FileUploadManager
             $this->om->persist($data);
             $this->om->flush();
 
-            $file = $this->getFileResponse($data);
+            $file = $this->getFileResponse($data, $request);
 
             $response = new JsonResponse([
                 'file' => $file,
@@ -98,15 +94,15 @@ class FileUploadManager
         return $response;
     }
 
-    public function getFileResponse(FileInterface $file)
+    public function getFileResponse(FileInterface $file, Request $request)
     {
         if (strpos($file->getMimeType(), 'image/') === 0) {
-            if ($originFilterName = $this->requestStack->getCurrentRequest()->get('origin_filter_name')) {
+            if ($originFilterName = $request->get('origin_filter_name')) {
                 $fileUrl = $this->imageManager->getImagePath($file, $originFilterName);
             } else {
                 $fileUrl = $this->assetsHelper->getUrl($file->getPath());
             }
-            if ($filterName = $this->requestStack->get('filter_name')) {
+            if ($filterName = $request->get('filter_name')) {
                 $thumbnailUrl = $this->imageManager->getImagePath($file, $filterName);
             }
         } else {
@@ -127,7 +123,11 @@ class FileUploadManager
     private function getErrors(FormInterface $form, array &$errors)
     {
         foreach ($form->getErrors() as $error) {
-            $errors[] = $this->translator->trans($error->getMessage(), $error->getMessageParameters(), 'ArthemFileBundle');
+            $errors[] = $this->translator->trans(
+                $error->getMessage(),
+                    $error->getMessageParameters(),
+                    'ArthemFileBundle'
+            );
         }
         foreach ($form as $child) {
             $this->getErrors($child, $errors);

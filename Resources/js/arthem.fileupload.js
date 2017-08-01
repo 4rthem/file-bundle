@@ -1,11 +1,26 @@
-window.Arthem = window.Arthem || {};
+/* jshint nomen:false */
+/* global define, window */
 
-(function ($, Arthem) {
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define([
+            'jquery',
+            './arthem.crop'
+        ], factory);
+    } else {
+        // Browser globals:
+        factory(
+            window.jQuery
+        );
+    }
+
+}(function ($, arthemCrop) {
     "use strict";
-
-    Arthem.fileUpload = {
+    const fileUpload = {
         setup: function ($c, options) {
-            var settings = $.extend({
+            let settings = $.extend({
                     multiple: false,
                     ajax: false,
                     crop: false,
@@ -31,7 +46,7 @@ window.Arthem = window.Arthem || {};
             });
 
             $form.submit(function () {
-                var $submits = $(this).find(":submit");
+                const $submits = $(this).find(":submit");
 
                 $submits.attr("disabled", true);
 
@@ -48,14 +63,14 @@ window.Arthem = window.Arthem || {};
                 // if a submit button was used to submit the form, is is now disabled and won't be transmitted to the server.
                 // that's why we replace it with an hidden input, so the sf2 submit form type can determine if it was clicked or not
                 if (null !== submitButtonUsed) {
-                    var submitButtonReplacement = $('<input type="hidden">');
+                    const submitButtonReplacement = $('<input type="hidden">');
                     submitButtonReplacement.attr("name", submitButtonUsed.attr("name"));
                     $(this).append(submitButtonReplacement);
                 }
             });
 
             $c.on("click", ".cn-remove-file-btn", function (e) {
-                var data, id, index;
+                let data, id, index;
                 e.preventDefault();
                 if (settings.multiple) {
                     data = $id.val().split(",");
@@ -68,7 +83,7 @@ window.Arthem = window.Arthem || {};
                 } else {
                     $id.val("");
                 }
-                var $preview = $(this).closest(".cn-file-preview");
+                const $preview = $(this).closest(".cn-file-preview");
                 if ($preview.data("jqfileupload")) {
                     $preview.data("jqfileupload").abort();
                 }
@@ -85,15 +100,15 @@ window.Arthem = window.Arthem || {};
             });
 
             $c.find(".cn-image-crop").each(function () {
-                var $crop = $(this);
+                const $crop = $(this);
 
-                var opts = {
+                let opts = {
                     filter: settings.filter_name,
                     imageUrl: $crop.data("origin-src"),
                     imageId: $crop.data("file-id"),
                 };
                 if ($crop.data("coords")) {
-                    var parts = $crop.data("coords").split(",");
+                    const parts = $crop.data("coords").split(",");
                     opts.coords = {
                         width: parts[0],
                         height: parts[1],
@@ -101,7 +116,7 @@ window.Arthem = window.Arthem || {};
                         left: parts[3]
                     }
                 }
-                Arthem.crop.init($crop, $.extend({}, settings.crop_options, opts));
+                arthemCrop.init($crop, $.extend({}, settings.crop_options, opts));
                 // Re-display .cn-progress because hidden by closeUpload() call
                 $crop.find(".cn-crop-outer-btns, .cn-progress").show();
             });
@@ -193,7 +208,7 @@ window.Arthem = window.Arthem || {};
                                     var $crop = data.context.find(".cn-image-crop");
 
                                     $crop.find(".cn-crop-area").html("").css("background-image", "url(" + file.thumbnail_url + ")");
-                                    Arthem.crop.init($crop, $.extend({}, settings.crop_options, {
+                                    arthemCrop.init($crop, $.extend({}, settings.crop_options, {
                                         filter: settings.filter_name,
                                         imageUrl: file.url,
                                         imageId: file.id
@@ -259,7 +274,7 @@ window.Arthem = window.Arthem || {};
     };
 
     $.fn.arthemFileUpload = function (options) {
-        Arthem.fileUpload.setup(this, options);
+        fileUpload.setup(this, options);
         return this;
     };
-}(jQuery, window.Arthem));
+}));

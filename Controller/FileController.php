@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FileController extends Controller
 {
-    public function uploadAction()
+    public function uploadAction(Request $request)
     {
         $fileManager = $this->get('arthem_file.file_upload_manager');
 
-        return $fileManager->handleForm();
+        return $fileManager->handleForm($request);
     }
 
     public function deleteAction(Request $request)

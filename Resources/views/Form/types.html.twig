@@ -51,9 +51,7 @@
 {% endblock %}
 
 {% block image_placeholder %}
-    <div class="cn-fileupload-placeholder">
-        <img src="{{ parent_class|image_placeholder(name, filter_name) }}">
-    </div>
+    <img src="{{ parent_class|image_placeholder(name, filter_name) }}">
 {% endblock %}
 
 {% block file_preview %}
@@ -91,9 +89,8 @@
         <div class="cn-remove-file">
             <a href="javascript:void(0)"
                {% if file %}data-file-id="{{ file.id }}"{% endif %}
-               class="cn-remove-file-btn btn btn-danger btn-xs"
-               title="{{ remove_file_label|trans|raw }}">
-                &times;
+               class="cn-remove-file-btn btn btn-danger">
+                {{ remove_file_label|trans|raw }}
             </a>
         </div>
         <div class="cn-fileupload-errors"></div>
@@ -103,7 +100,7 @@
 {% block crop_wrapper %}
     <div class="cn-image-crop"
             {% if file %}
-                data-origin-src="{{ asset(file.url) }}"
+                data-origin-src="{{ file.object|image(null, origin_filter_name) }}"
                 data-file-id="{{ file.id }}"
                 {% set _crop = file.object.imageCrop(filter_name) %}
                 {% if _crop is not null %}
@@ -113,7 +110,7 @@
             >
         <div class="cn-crop-area cn-file-icon"
                 {% if file %}
-                    style="background-image:url({{ file.url|imagine_filter(filter_name) }})"
+                    style="background-image:url({{ file.object|image(null, filter_name) }})"
                 {% endif %}
                 ></div>
         <div class="cn-crop-controls">

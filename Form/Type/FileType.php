@@ -355,6 +355,9 @@ class FileType extends AbstractType
         $jsOptions['multiple'] = $options['multiple'];
 
         $view->vars['js_options'] = json_encode($jsOptions);
+        if ($options['origin_filter_name']) {
+            $view->vars['origin_filter_name'] = $options['origin_filter_name'];
+        }
 
         $data = $form->getData();
 
@@ -366,9 +369,11 @@ class FileType extends AbstractType
                 if ($file instanceof FileInterface) {
                     $accessor = PropertyAccess::createPropertyAccessor();
                     $mimeType = $accessor->getValue($file, 'mimeType');
+                    $path = $accessor->getValue($file, 'path');
+
                     $filesInfo[] = [
                         'id' => $file->getId(),
-                        'url' => $accessor->getValue($file, 'path'),
+                        'url' => $path,
                         'name' => $accessor->getValue($file, 'originalFilename'),
                         'mime_type' => $mimeType,
                         'icon' => $this->getFileIcon($iconClasses, $mimeType),

@@ -12,7 +12,6 @@ class GedmoUploadableListener extends UploadableListener
     {
         $path = self::getUploadTmpDir() . '/' . $dest;
         $dir = dirname($path);
-        var_dump($dir);
 
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
