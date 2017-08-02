@@ -20,11 +20,3 @@ services:
             - "%arthem_file.form.default.preview_height%"
         tags:
             - { name: form.type, alias: arthem_file }
-
-    arthem_file.form.tinymce.plugin.arthem_image_upload:
-        class: Arthem\Bundle\FileBundle\Form\TinyMce\ImageUploadExtension
-        arguments:
-            - "@router"
-            - "@security.csrf.token_manager"
-        tags:
-            - { name: arthem_base.tinymce_extension }
