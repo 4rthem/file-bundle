@@ -59,7 +59,12 @@
         {% if crop %}
             {{ block('crop_wrapper') }}
         {% else %}
-            <a class="cn-file-open-btn" href="{{ file and file.url ? asset(file.url) : 'javascript:void(0)' }}"
+            {% if file and file.url %}
+                {% set url = file.mime_type matches '{^image/}' ? file.url|imagine_filter(origin_filter_name) : asset(file.url) %}
+            {% else %}
+                {% set url = 'javascript:void(0)' %}
+            {% endif %}
+            <a class="cn-file-open-btn" href="{{ url }}"
                target="_blank">
                 <div class="cn-file-icon">
                     {% if file and file.mime_type %}

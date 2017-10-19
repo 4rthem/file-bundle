@@ -316,6 +316,7 @@ class FileType extends AbstractType
         $view->vars['browse_label'] = $options['browse_label'];
         $view->vars['browse_translation_domain'] = $options['browse_translation_domain'];
         $view->vars['display_preview_name'] = $options['display_preview_name'];
+        $view->vars['origin_filter_name'] = $options['origin_filter_name'];
         if ($options['multiple']) {
             $view->vars['attr']['multiple'] = 'multiple';
         }
