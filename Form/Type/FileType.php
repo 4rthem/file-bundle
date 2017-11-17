@@ -127,12 +127,12 @@ class FileType extends AbstractType
         $csrfTokenManager = $options['csrf_token_manager'];
         $token = $csrfTokenManager->getToken('file')->getValue();
 
-        $fileInput->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($token) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($token) {
             $config = $event->getForm()->getConfig();
             $multiple = $config->getOption('multiple');
-            $data = $event->getData();
+            $data = $event->getForm()->get('file')->getData();
 
-            $handleFile = function ($data) use (&$options, $token) {
+            $handleFile = function ($data) use ($token) {
                 if ($data instanceof UploadedFile) {
                     /** @var FileInterface $file */
                     $file = new $this->class();
@@ -160,24 +160,13 @@ class FileType extends AbstractType
             $event->setData($d);
         });
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use (&$options) {
-            $idInput = $event->getForm()->get('id');
-            if ($options['multiple']) {
-                /** @var FileInterface[] $files */
-                if ($files = $event->getData()) {
-                    $ids = [];
-                    foreach ($files as $file) {
-                        $ids[] = $file->getId();
-                    }
-                    $idInput->setData(implode(',', $ids));
+        if ($options['multiple']) {
+            $fileInput->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+                if (null === $event->getData()) {
+                    $event->setData([]);
                 }
-            } else {
-                $file = $event->getData();
-                if ($file instanceof FileInterface) {
-                    $idInput->setData($file->getId());
-                }
-            }
-        });
+            }, 100);
+        }
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($token) {
             $config = $event->getForm()->getConfig();
@@ -209,8 +198,8 @@ class FileType extends AbstractType
 
                 $event->setData($files);
             } else {
-                if ($fileInput->getData() instanceof FileInterface) {
-                    $event->setData($fileInput->getData());
+                if ($fileInput->getData() instanceof UploadedFile) {
+                    ; // Valid case
                 } elseif ($data) {
                     $file = $this->om->find($this->class, $data);
                     if ($file instanceof FileInterface) {
@@ -224,6 +213,27 @@ class FileType extends AbstractType
                 }
             }
         });
+
+
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use (&$options) {
+            $idInput = $event->getForm()->get('id');
+            if ($options['multiple']) {
+                /** @var FileInterface[] $files */
+                if ($files = $event->getData()) {
+                    $ids = [];
+                    foreach ($files as $file) {
+                        $ids[] = $file->getId();
+                    }
+                    $idInput->setData(implode(',', $ids));
+                }
+            } else {
+                $file = $event->getData();
+                if ($file instanceof FileInterface) {
+                    $idInput->setData($file->getId());
+                }
+            }
+        });
+
 
         $builder->add($fileInput);
         $builder->add($idInput);
