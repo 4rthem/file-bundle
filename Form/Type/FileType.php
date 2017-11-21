@@ -172,7 +172,7 @@ class FileType extends AbstractType
             $config = $event->getForm()->getConfig();
             $multiple = $config->getOption('multiple');
 
-            $originData = $event->getData();
+            $originData = $event->getForm()->getData();
             $fileInput = $event->getForm()->get('file');
             $idInput = $event->getForm()->get('id');
 
