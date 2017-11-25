@@ -2,6 +2,8 @@
 
 namespace Arthem\Bundle\FileBundle\DependencyInjection;
 
+use Arthem\Bundle\FileBundle\LetterAvatar\AvatarGenerator;
+use Arthem\Bundle\FileBundle\LetterAvatar\LetterAvatarManager;
 use Arthem\Bundle\FileBundle\Storage\GaufretteStorageStrategy;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
@@ -52,6 +54,10 @@ class ArthemFileExtension extends Extension
             $this->loadStorage($container, $loader, $config['storage']);
         }
 
+        if ($config['letter_avatar']['enabled']) {
+            $this->loadAvatar($container, $loader, $config['letter_avatar']);
+        }
+
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ArthemFixturesBundle'])) {
             $loader->load('fixture.yml');
@@ -68,6 +74,20 @@ class ArthemFileExtension extends Extension
         $gaufretteDef->setArgument(0, new Reference(
             sprintf('oneup_flysystem.%s_filesystem', $config['gaufrette']['adapter'])
         ));
+    }
+
+    public function loadAvatar(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    {
+        $loader->load('avatar.yml');
+        $definition = $container->getDefinition(AvatarGenerator::class);
+        $definition->setArgument('$colors', $config['colors']);
+        $definition->setArgument('$font', $config['font']);
+
+        $def = $container->getDefinition('arthem_file.image_manager');
+        $def->addMethodCall('setLetterAvatars', [
+            new Reference(LetterAvatarManager::class),
+            $config['mapping'],
+        ]);
     }
 
     public function loadImage(ContainerBuilder $container, LoaderInterface $loader, array $config)

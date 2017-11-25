@@ -1,0 +1,3 @@
+arthem_file_letter_avatar:
+    path:     /avatar/{text}.svg
+    defaults: { _controller: ArthemFileBundle:Placeholder:letterAvatar }

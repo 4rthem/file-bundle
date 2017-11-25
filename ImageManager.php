@@ -2,6 +2,7 @@
 
 namespace Arthem\Bundle\FileBundle;
 
+use Arthem\Bundle\FileBundle\LetterAvatar\LetterAvatarManager;
 use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Arthem\Bundle\FileBundle\Model\ImageInterface;
 use Doctrine\Common\Util\ClassUtils;
@@ -23,11 +24,28 @@ class ImageManager
 
     private $cache = [];
 
+    private $letterAvatars = [];
+
+    /**
+     * @var LetterAvatarManager
+     */
+    private $avatarManager;
+
     public function __construct(CacheManager $cacheManager, array $placeholders, $cropActive = false)
     {
         $this->cacheManager = $cacheManager;
         $this->placeholders = $placeholders;
         $this->cropActive = $cropActive;
+    }
+
+    /**
+     * @param LetterAvatarManager $avatarManager
+     * @param array $letterAvatars
+     */
+    public function setLetterAvatars(LetterAvatarManager $avatarManager, array $letterAvatars)
+    {
+        $this->avatarManager = $avatarManager;
+        $this->letterAvatars = $letterAvatars;
     }
 
     public function imagePath($object, $field, $filter)
@@ -37,10 +55,13 @@ class ImageManager
             return $this->cache[$key];
         }
         $image = $object->{'get'.ucfirst($field)}();
+        $objectClass = ClassUtils::getRealClass(get_class($object));
         if ($image instanceof FileInterface) {
             $path = $image->getPath();
+        } elseif (isset($this->letterAvatars[$objectClass], $this->letterAvatars[$objectClass][$field])) {
+            return $this->cache[$key] = $this->getLetterAvatarUrl($object, $this->letterAvatars[$objectClass][$field]);
         } else {
-            return $this->imagePlaceholder(get_class($object), $field, $filter);
+            return $this->cache[$key] = $this->imagePlaceholder($objectClass, $field, $filter);
         }
 
         if (null === $path) {
@@ -53,6 +74,28 @@ class ImageManager
         }
 
         return $this->cache[$key];
+    }
+
+    public function getLetterAvatarUrl($object, $textField): string
+    {
+        $text = $object->{'get'.ucfirst($textField)}();
+
+        return $this->avatarManager->generatePath($text);
+    }
+
+    public function letterAvatar($object, $field): string
+    {
+        $objectClass = ClassUtils::getRealClass(get_class($object));
+        $key = $objectClass.'.'.$field.'.letter';
+        if (isset($this->cache[$key])) {
+            return $this->cache[$key];
+        }
+
+        if ($objectClass && isset($this->letterAvatars[$objectClass][$field])) {
+            return $this->cache[$key] = $this->getLetterAvatarUrl($object, $this->letterAvatars[$objectClass][$field]);
+        } else {
+            throw new \InvalidArgumentException(sprintf('Letter avatar is not defined for %s::%s', $objectClass, $field));
+        }
     }
 
     /**

@@ -32,6 +32,7 @@ class ImageExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFilter('image', [$this, 'image']),
             new \Twig_SimpleFilter('image_placeholder', [$this, 'imagePlaceholder']),
+            new \Twig_SimpleFilter('letter_avatar', [$this, 'letterAvatar']),
         ];
     }
 
@@ -47,5 +48,10 @@ class ImageExtension extends \Twig_Extension
     public function imagePlaceholder($object, $field, $filter)
     {
         return $this->imageManager->imagePlaceholder($object, $field, $filter);
+    }
+
+    public function letterAvatar($object, $field)
+    {
+        return $this->imageManager->letterAvatar($object, $field);
     }
 }
