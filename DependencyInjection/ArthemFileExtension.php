@@ -2,6 +2,7 @@
 
 namespace Arthem\Bundle\FileBundle\DependencyInjection;
 
+use Arthem\Bundle\FileBundle\ImageManager;
 use Arthem\Bundle\FileBundle\LetterAvatar\AvatarGenerator;
 use Arthem\Bundle\FileBundle\LetterAvatar\LetterAvatarManager;
 use Arthem\Bundle\FileBundle\Storage\GaufretteStorageStrategy;
@@ -83,7 +84,7 @@ class ArthemFileExtension extends Extension
         $definition->setArgument('$colors', $config['colors']);
         $definition->setArgument('$font', $config['font']);
 
-        $def = $container->getDefinition('arthem_file.image_manager');
+        $def = $container->getDefinition(ImageManager::class);
         $def->addMethodCall('setLetterAvatars', [
             new Reference(LetterAvatarManager::class),
             $config['mapping'],
@@ -97,8 +98,9 @@ class ArthemFileExtension extends Extension
             throw new InvalidConfigurationException('LiipImagineBundle must be enabled in order to use image component.');
         }
 
-        $container->setParameter('arthem_file.image.placeholders', $config['placeholders']);
         $loader->load('image.yml');
+        $definition = $container->getDefinition(ImageManager::class);
+        $definition->setArgument('$placeholders', $config['placeholders']);
 
         if ($config['crop']['enabled']) {
             $this->loadImageCrop($container, $loader, $config['crop']);
@@ -115,8 +117,8 @@ class ArthemFileExtension extends Extension
         $def->addArgument('%arthem_file.model.image_crop.class%');
         $def->addArgument('%arthem_file.model.image_crop.table%');
 
-        $def = $container->getDefinition('arthem_file.image_manager');
-        $def->replaceArgument(2, true);
+        $def = $container->getDefinition(ImageManager::class);
+        $def->replaceArgument('$cropActive', true);
 
         $loader->load('image_crop.yml');
     }

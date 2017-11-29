@@ -1,16 +1,14 @@
 
 services:
-    arthem_file.image_manager:
-        class: Arthem\Bundle\FileBundle\ImageManager
-        arguments:
-            - "@liip_imagine.cache.manager"
-            - "%arthem_file.image.placeholders%"
-            - false
+    _defaults:
+        autowire: true
 
-    arthem_file.twig.extension.image:
-        public: false
-        class: Arthem\Bundle\FileBundle\Twig\Extension\ImageExtension
+    Arthem\Bundle\FileBundle\ImageManager:
         arguments:
-            - "@arthem_file.image_manager"
+            $placeholders: "%arthem_file.image.placeholders%"
+            $cropActive: false
+
+    Arthem\Bundle\FileBundle\Twig\Extension\ImageExtension:
+        public: false
         tags:
             - { name: twig.extension, alias: arthem_image }

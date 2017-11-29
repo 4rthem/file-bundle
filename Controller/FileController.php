@@ -3,6 +3,7 @@
 namespace Arthem\Bundle\FileBundle\Controller;
 
 use Arthem\Bundle\FileBundle\Doctrine\ImageCropManager;
+use Arthem\Bundle\FileBundle\ImageManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,7 +54,7 @@ class FileController extends Controller
         $filter = $r->get('filter');
         $crop = $imageCropManager->crop($image, $r->get('origin_filter'), $filter, $r->get('crop'));
 
-        $imageManager = $this->get('arthem_file.image_manager');
+        $imageManager = $this->get(ImageManager::class);
 
         return new JsonResponse([
             'url' => $imageManager->getImagePath($image, $filter),

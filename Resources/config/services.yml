@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        autowire: true
+
     arthem_file.http_client:
         public: false
         class: GuzzleHttp\Client
@@ -6,21 +9,12 @@ services:
     arthem_file.file_downloader:
         class: Arthem\Bundle\FileBundle\Downloader\FileDownloader
         arguments:
-            - "@arthem_file.http_client"
-            - "@stof_doctrine_extensions.uploadable.manager"
-            - "%arthem_file.model.file.class%"
+            $client: "@arthem_file.http_client"
+            $fileClass: "%arthem_file.model.file.class%"
 
-    arthem_file.file_upload_manager.factory:
-        class: Arthem\Bundle\FileBundle\Model\FileUploadManagerFactory
-        arguments:
-            - "@doctrine"
-            - "@form.factory"
-            - "@arthem_file.image_manager"
-            - "@assets.packages"
-            - "@translator"
+    Arthem\Bundle\FileBundle\Model\FileUploadManagerFactory: ~
 
-    arthem_file.file_upload_manager:
-        class: Arthem\Bundle\FileBundle\Model\FileUploadManager
-        factory: "arthem_file.file_upload_manager.factory:createManagerFor"
+    Arthem\Bundle\FileBundle\Model\FileUploadManager:
+        factory: ['Arthem\Bundle\FileBundle\Model\FileUploadManagerFactory', createManagerFor]
         arguments:
             - "%arthem_file.model.file.class%"
