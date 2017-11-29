@@ -15,6 +15,6 @@ services:
     Arthem\Bundle\FileBundle\Model\FileUploadManagerFactory: ~
 
     Arthem\Bundle\FileBundle\Model\FileUploadManager:
-        factory: ['Arthem\Bundle\FileBundle\Model\FileUploadManagerFactory', createManagerFor]
+        factory: ['@Arthem\Bundle\FileBundle\Model\FileUploadManagerFactory', createManagerFor]
         arguments:
             - "%arthem_file.model.file.class%"
