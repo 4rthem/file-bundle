@@ -31,12 +31,8 @@ class AvatarGenerator
     public function generate(string $name): string
     {
         $initials = $this->getInitials($name);
-        $index = 0;
-        foreach ($initials as $initial) {
-            $index += ord($initial) - 65;
-        }
 
-        $color = (int) floor($index % count($this->colors));
+        $color = (int) floor(crc32($name) % count($this->colors));
 
         return $this->renderer->render('@ArthemFile/Placeholder/letter_avatar.svg.twig', [
             'text' => implode('', $initials),
