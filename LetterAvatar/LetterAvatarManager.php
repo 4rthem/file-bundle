@@ -19,7 +19,7 @@ class LetterAvatarManager
     public function generatePath(string $text): string
     {
         return $this->router->generate('arthem_file_letter_avatar', [
-            'text' => $text,
+            'text' => urlencode(base64_encode($text)),
         ]);
     }
 }
