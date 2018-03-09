@@ -86,7 +86,7 @@ class ImageManager
     public function letterAvatar($object, $field): string
     {
         $objectClass = ClassUtils::getRealClass(get_class($object));
-        $key = $objectClass.'.'.$field.'.letter';
+        $key = spl_object_hash($object).'.'.$field.'.letter';
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
