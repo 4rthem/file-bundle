@@ -58,8 +58,11 @@ class ImageManager
         $objectClass = ClassUtils::getRealClass(get_class($object));
         if ($image instanceof FileInterface) {
             $path = $image->getPath();
-        } elseif (isset($this->letterAvatars[$objectClass], $this->letterAvatars[$objectClass][$field])) {
-            return $this->cache[$key] = $this->getLetterAvatarUrl($object, $this->letterAvatars[$objectClass][$field]);
+        } elseif (
+            isset($this->letterAvatars[$objectClass], $this->letterAvatars[$objectClass][$field])
+            && null !== $letterAvatarUrl = $this->getLetterAvatarUrl($object, $this->letterAvatars[$objectClass][$field])
+        ) {
+            return $this->cache[$key] = $letterAvatarUrl;
         } else {
             return $this->cache[$key] = $this->imagePlaceholder($objectClass, $field, $filter);
         }
@@ -76,14 +79,17 @@ class ImageManager
         return $this->cache[$key];
     }
 
-    public function getLetterAvatarUrl($object, $textField): string
+    public function getLetterAvatarUrl($object, string $textField): ?string
     {
         $text = $object->{'get'.ucfirst($textField)}();
+        if (null === $text) {
+            return null;
+        }
 
         return $this->avatarManager->generatePath($text);
     }
 
-    public function letterAvatar($object, $field): string
+    public function letterAvatar($object, string $field): ?string
     {
         $objectClass = ClassUtils::getRealClass(get_class($object));
         $key = spl_object_hash($object).'.'.$field.'.letter';

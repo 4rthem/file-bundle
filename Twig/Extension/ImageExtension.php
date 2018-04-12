@@ -50,7 +50,7 @@ class ImageExtension extends \Twig_Extension
         return $this->imageManager->imagePlaceholder($object, $field, $filter);
     }
 
-    public function letterAvatar($object, $field)
+    public function letterAvatar($object, string $field): ?string
     {
         return $this->imageManager->letterAvatar($object, $field);
     }
