@@ -4,6 +4,7 @@ namespace Arthem\Bundle\FileBundle\Controller;
 
 use Arthem\Bundle\FileBundle\Doctrine\ImageCropManager;
 use Arthem\Bundle\FileBundle\ImageManager;
+use Arthem\Bundle\FileBundle\Model\FileUploadManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +14,7 @@ class FileController extends Controller
 {
     public function uploadAction(Request $request)
     {
-        $fileManager = $this->get('arthem_file.file_upload_manager');
+        $fileManager = $this->get(FileUploadManager::class);
 
         return $fileManager->handleForm($request);
     }
