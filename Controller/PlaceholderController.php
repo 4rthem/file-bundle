@@ -8,14 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PlaceholderController extends Controller
 {
-    public function letterAvatarAction(string $text)
+    public function letterAvatarAction(string $text, AvatarGenerator $avatarGenerator)
     {
         $text = base64_decode($text);
 
         $response = new Response(
-            $this
-                ->get(AvatarGenerator::class)
-                ->generate($text),
+            $avatarGenerator->generate($text),
             200,
             [
                 'Content-Type' => 'image/svg+xml',
