@@ -10,7 +10,7 @@ class PlaceholderController extends Controller
 {
     public function letterAvatarAction(string $text)
     {
-        $text = base64_decode($text);
+        $text = base64_decode(urldecode($text));
 
         $response = new Response(
             $this
