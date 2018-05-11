@@ -263,6 +263,9 @@
                             }
                             node.find(".cn-file-icon").html($("<i/>", {
                                 "class": fileIconClass
+                            })).append($('<div/>', {
+                                "class": "cn-file-name",
+                                "text": file.name
                             }));
                         }
                         if (file.error) {
