@@ -112,6 +112,8 @@ class FileUploadManager
         $file = [
             'id' => $file->getId(),
             'url' => $fileUrl,
+            'name' => $file->getOriginalFilename(),
+            'mime_type' => $file->getMimeType(),
         ];
         if (isset($thumbnailUrl)) {
             $file['thumbnail_url'] = $thumbnailUrl;
@@ -125,8 +127,8 @@ class FileUploadManager
         foreach ($form->getErrors() as $error) {
             $errors[] = $this->translator->trans(
                 $error->getMessage(),
-                    $error->getMessageParameters(),
-                    'ArthemFileBundle'
+                $error->getMessageParameters(),
+                'ArthemFileBundle'
             );
         }
         foreach ($form as $child) {
