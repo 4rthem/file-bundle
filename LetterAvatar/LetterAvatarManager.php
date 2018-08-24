@@ -20,6 +20,6 @@ class LetterAvatarManager
     {
         return $this->router->generate('arthem_file_letter_avatar', [
             'text' => urlencode(base64_encode($text)),
-        ]);
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
