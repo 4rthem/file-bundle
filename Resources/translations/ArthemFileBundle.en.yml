@@ -2,8 +2,13 @@
 form:
     remove_file:
         label: Remove
+        confirm: Are you sure you want to delete this file?
     file:
-        browse: Browse
+        browse: Choose a file
+        drag: |
+            Drag files to upload here
+            or
+
     unknown_error_message: Sorry, an error has occured
     pending_uploads: Pending upload...
 

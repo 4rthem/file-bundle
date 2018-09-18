@@ -127,9 +127,6 @@ class File implements FileInterface, ImageInterface
         return $this->originalFilename;
     }
 
-    /**
-     * @return float
-     */
     public function getSize()
     {
         return $this->size;

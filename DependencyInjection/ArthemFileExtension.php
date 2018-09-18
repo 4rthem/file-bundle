@@ -2,10 +2,12 @@
 
 namespace Arthem\Bundle\FileBundle\DependencyInjection;
 
+use Arthem\Bundle\FileBundle\Form\Type\ReactFileType;
 use Arthem\Bundle\FileBundle\ImageManager;
 use Arthem\Bundle\FileBundle\LetterAvatar\AvatarGenerator;
 use Arthem\Bundle\FileBundle\LetterAvatar\LetterAvatarManager;
 use Arthem\Bundle\FileBundle\Storage\GaufretteStorageStrategy;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -97,6 +99,9 @@ class ArthemFileExtension extends Extension
         if (!isset($bundles['LiipImagineBundle'])) {
             throw new InvalidConfigurationException('LiipImagineBundle must be enabled in order to use image component.');
         }
+
+        $def = $container->getDefinition(ReactFileType::class);
+        $def->setArgument('$cacheManager', new Reference(CacheManager::class));
 
         $loader->load('image.yml');
         $definition = $container->getDefinition(ImageManager::class);

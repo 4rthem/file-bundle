@@ -2,8 +2,12 @@
 form:
     remove_file:
         label: Supprimer
+        confirm: Êtes-vous sûr de vouloir supprimer ce fichier ?
     file:
-        browse: Parcourir
+        browse: Choisir un fichier
+        drag: |
+            Glisser les fichiers à envoyer ici
+            ou
     unknown_error_message: Désolé, une erreur est survenue
     pending_uploads: Téléchargement en cours...
 

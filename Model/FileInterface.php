@@ -65,4 +65,9 @@ interface FileInterface
      * @return $this
      */
     public function setToken($token);
+
+    /**
+     * @return float
+     */
+    public function getSize();
 }

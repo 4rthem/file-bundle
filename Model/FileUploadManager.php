@@ -56,30 +56,47 @@ class FileUploadManager
         return $formBuilder->getForm();
     }
 
-    /**
-     * @param Request $request
-     * @param \Closure|null $callback
-     * @param array $fileOptions
-     * @return JsonResponse
-     */
-    public function handleForm(Request $request, \Closure $callback = null, array $fileOptions = [])
+    public function handleForm(
+        Request $request,
+        \Closure $callback = null,
+        array $fileOptions = [],
+        ?callable $urlHandler = null)
     {
+        $multiple = $fileOptions['multiple'] ?? false;
         $form = $this->getForm($fileOptions);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var FileInterface $data */
+            /** @var FileInterface|FileInterface[] $data */
             $data = $form->get('file')->getData();
             if ($callback) {
                 call_user_func($callback, $data, $this->om);
             }
-            $this->om->persist($data);
+            if ($multiple) {
+                foreach ($data as $d) {
+                    $this->om->persist($d);
+                }
+            } else {
+                $this->om->persist($data);
+            }
             $this->om->flush();
 
-            $file = $this->getFileResponse($data, $request);
+            if ($multiple) {
+                $files = [];
+                foreach ($data as $d) {
+                    $this->om->persist($d);
+                    $files[] = $this->getFileResponse($d, $request, $urlHandler);
+                }
 
-            $response = new JsonResponse([
-                'file' => $file,
-            ]);
+                $response = new JsonResponse([
+                    'files' => $files,
+                ]);
+            } else {
+                $file = $this->getFileResponse($data, $request, $urlHandler);
+
+                $response = new JsonResponse([
+                    'file' => $file,
+                ]);
+            }
 
             return $response;
         }
@@ -94,19 +111,19 @@ class FileUploadManager
         return $response;
     }
 
-    public function getFileResponse(FileInterface $file, Request $request)
+    private function getFileResponse(FileInterface $file, Request $request, ?callable $urlHandler)
     {
         if (strpos($file->getMimeType(), 'image/') === 0) {
             if ($originFilterName = $request->get('origin_filter_name')) {
                 $fileUrl = $this->imageManager->getImagePath($file, $originFilterName);
             } else {
-                $fileUrl = $this->assetsHelper->getUrl($file->getPath());
+                $fileUrl = null !== $urlHandler ? $urlHandler($file) : $this->assetsHelper->getUrl($file->getPath());
             }
             if ($filterName = $request->get('filter_name')) {
                 $thumbnailUrl = $this->imageManager->getImagePath($file, $filterName);
             }
         } else {
-            $fileUrl = $this->assetsHelper->getUrl($file->getPath());
+            $fileUrl = null !== $urlHandler ? $urlHandler($file) : $this->assetsHelper->getUrl($file->getPath());
         }
 
         $file = [

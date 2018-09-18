@@ -1,0 +1,13 @@
+{% trans_default_domain 'ArthemFileBundle' %}
+
+{% block arthem_react_file_widget %}
+    <div id="react-uploader-{{ form.vars.id }}"></div>
+    {{ form_widget(form.id) }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            $(function () {
+                renderReactUploader($('#react-uploader-{{ form.vars.id }}')[0], {{ js_options|raw }});
+            });
+        });
+    </script>
+{%- endblock -%}

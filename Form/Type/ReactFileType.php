@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arthem\Bundle\FileBundle\Form\Type;
 
 use Arthem\Bundle\FileBundle\EventListener\UploadableListener;
 use Arthem\Bundle\FileBundle\Model\FileInterface;
+use Arthem\Bundle\FileBundle\Model\FileWrapperInterface;
 use Arthem\Bundle\FileBundle\Validator\File;
 use Doctrine\ORM\EntityManager;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType as BaseFileType;
@@ -25,7 +29,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class FileType extends AbstractType
+class ReactFileType extends AbstractType
 {
     protected $class;
 
@@ -73,6 +77,14 @@ class FileType extends AbstractType
      * @var AuthorizationCheckerInterface
      */
     private $authorizationChecker;
+    /**
+     * @var RegistryInterface
+     */
+    private $registry;
+    /**
+     * @var CacheManager
+     */
+    private $cacheManager;
 
     public function __construct(
         $class,
@@ -84,8 +96,10 @@ class FileType extends AbstractType
         $defaultFilterName,
         $defaultOriginFilterName,
         $defaultPreviewWidth,
-        $defaultPreviewHeight
-    ) {
+        $defaultPreviewHeight,
+        ?CacheManager $cacheManager = null
+    )
+    {
         $this->class = $class;
         $this->om = $registry->getManagerForClass($class);
         $this->uploadableListener = $uploadableListener;
@@ -96,6 +110,8 @@ class FileType extends AbstractType
         $this->defaultPreviewWidth = $defaultPreviewWidth;
         $this->defaultPreviewHeight = $defaultPreviewHeight;
         $this->authorizationChecker = $authorizationChecker;
+        $this->registry = $registry;
+        $this->cacheManager = $cacheManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -195,9 +211,8 @@ class FileType extends AbstractType
                         $files[] = $file;
                     }
                 }
-                if (null === $event->getData()) {
-                    $event->setData($files);
-                }
+
+                $event->setData($files);
             } else {
                 if ($fileInput->getData() instanceof UploadedFile) {
                     ; // Valid case
@@ -214,7 +229,6 @@ class FileType extends AbstractType
                 }
             }
         });
-
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use (&$options) {
             $idInput = $event->getForm()->get('id');
@@ -246,6 +260,7 @@ class FileType extends AbstractType
             'error_bubbling' => false,
             'intention' => 'file',
             'browse_label' => 'form.file.browse',
+            'drag_label' => 'form.file.drag',
             'browse_translation_domain' => 'ArthemFileBundle',
             'display_preview_name' => false,
             'data_class' => function (Options $options) {
@@ -264,10 +279,13 @@ class FileType extends AbstractType
             'preview_width' => $this->defaultPreviewWidth,
             'preview_height' => $this->defaultPreviewHeight,
             'upload_route_name' => 'arthem_file_file_upload',
+            'open_route_name' => null,
             'url' => function (Options $options) {
                 return $this->router->generate($options['upload_route_name']);
             },
+            'delete_route' => null,
             'remove_file_label' => 'form.remove_file.label',
+            'remove_file_confirm_label' => 'form.remove_file.confirm',
             'unknown_error_message' => 'form.unknown_error_message',
             'pending_uploads_label' => 'form.pending_uploads',
             'multiple' => false,
@@ -278,147 +296,124 @@ class FileType extends AbstractType
                 'image/png',
                 'image/gif',
             ],
-            'icons_classes' => [
-                'image/.+' => 'fa fa-file-picture-o',
-                'application/g?zip' => 'fa fa-file-archive-o',
-                'video/.+' => 'fa fa-file-video-o',
-                'application/(msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document)' => 'fa fa-file-word-o',
-                'application/(excel|vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet)' => 'fa fa-file-excel-o',
-                'audio/.+' => 'fa fa-file-sound-o',
-                'text/(php|javascript|html|x-shockwave-flash)' => 'fa fa-file-code-o',
-                'text/plain' => 'fa fa-file-text-o',
-                'application/pdf' => 'fa fa-file-pdf-o',
-                'application/powerpoint' => 'fa fa-file-powerpoint-o',
-                '.+' => 'fa fa-file-o',
-            ],
         ]);
-
-        $resolver->setAllowedTypes('icons_classes', [
-            'array',
-        ]);
-
-        $resolver->setNormalizer('crop', function (Options $options, $value) {
-            if ($value === true && !$options['ajax']) {
-                throw new \InvalidArgumentException('"ajax" must be enabled with "crop"');
-            }
-
-            return $value;
-        });
     }
 
     /**
      * Pass the file URL to the view.
      *
-     * @param FormView      $view
+     * @param FormView $view
      * @param FormInterface $form
-     * @param array         $options
+     * @param array $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['crop'] = $options['crop'];
-        $view->vars['multiple'] = $options['multiple'];
-        $view->vars['display_placeholder'] = $options['display_placeholder'];
-        if ($options['display_placeholder']) {
-            $view->vars['parent_class'] = $form->getParent()->getConfig()->getDataClass();
-        }
-        $view->vars['remove_file_label'] = $options['remove_file_label'];
-        $view->vars['filter_name'] = $options['filter_name'];
-        $view->vars['display_preview'] = null === $options['target_selector'];
-        $view->vars['browse_label'] = $options['browse_label'];
-        $view->vars['browse_translation_domain'] = $options['browse_translation_domain'];
-        $view->vars['display_preview_name'] = $options['display_preview_name'];
-        $view->vars['origin_filter_name'] = $options['origin_filter_name'];
-        if ($options['multiple']) {
-            $view->vars['attr']['multiple'] = 'multiple';
-        }
-
-        $jsOptions = [];
+        $jsOptions = [
+            'confirmDeleteLabel' => $this->translate($options['remove_file_confirm_label'], [], $options['browse_translation_domain']),
+            'browseButtonLabel' => $this->translate($options['browse_label'], [], $options['browse_translation_domain']),
+            'dragLabel' => trim($this->translate($options['drag_label'], [], $options['browse_translation_domain'])),
+        ];
         if ($options['ajax']) {
             $rootForm = $form->getRoot();
-            $token = (string) $rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
 
-            $jsOptions = [
-                'ajax' => true,
-                'url' => $options['url'],
-                'token' => $token,
-                'remove_file_label' => $this->translate($options['remove_file_label']),
-                'unknown_error_message' => $this->translate($options['unknown_error_message']),
-                'target_selector' => $options['target_selector'],
-                'preview_width' => $options['preview_width'],
-                'preview_height' => $options['preview_height'],
-                'icon_classes' => $options['icons_classes'],
-                'pending_uploads_label' => $this->translate($options['pending_uploads_label']),
-            ];
+            $uploadParams = [];
             if ($options['filter_name']) {
-                $jsOptions['filter_name'] = $options['filter_name'];
+                $uploadParams['filter_name'] = $options['filter_name'];
             }
             if ($options['origin_filter_name']) {
-                $jsOptions['origin_filter_name'] = $options['origin_filter_name'];
+                $uploadParams['origin_filter_name'] = $options['origin_filter_name'];
             }
-        }
+            $uploadParams['file[_token]'] = (string)$rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
 
-        if ($options['crop']) {
-            $jsOptions['crop'] = true;
-            $jsOptions['crop_options'] = [
-                'cropUrl' => $this->router->generate('arthem_file_image_crop'),
+
+            $jsOptions += [
+                'uploadUrl' => $options['url'],
+                'fieldName' => 'file[file][file]',
+                'idFieldName' => $view->vars['full_name'] . '[id]',
+                'uploadParams' => $uploadParams,
             ];
-        }
 
-        $jsOptions['multiple'] = $options['multiple'];
-
-        $view->vars['js_options'] = json_encode($jsOptions);
-        if ($options['origin_filter_name']) {
-            $view->vars['origin_filter_name'] = $options['origin_filter_name'];
+            if ($options['delete_route']) {
+                $jsOptions['deleteUrl'] = $this->router->generate($options['delete_route']);
+            }
         }
 
         $data = $form->getData();
-
         $filesInfo = [];
         if (null !== $data) {
-            $iconClasses = $options['icons_classes'];
             $files = $options['multiple'] ? $data : [$data];
             foreach ($files as $file) {
+                if ($file instanceof FileWrapperInterface) {
+                    $file = $file->getWrappedFile();
+                }
                 if ($file instanceof FileInterface) {
                     $accessor = PropertyAccess::createPropertyAccessor();
                     $mimeType = $accessor->getValue($file, 'mimeType');
                     $path = $accessor->getValue($file, 'path');
+                    $originalFilename = $accessor->getValue($file, 'originalFilename');
 
-                    $filesInfo[] = [
+                    $isImage = 1 === preg_match('#^image/(gif|png|jpe?g|svg(\+xml)?)$#', $mimeType, $regs);
+                    $isSVG = $isImage && 0 === strpos($regs[1], 'svg');
+                    $url = null;
+
+                    $generateOpenUrl = function () use ($file, $options): ?string {
+                        if (null === $options['open_route_name']) {
+                            return null;
+                        }
+
+                        return $this->router->generate($options['open_route_name'], [
+                            'fileId' => $file->getId(),
+                        ]);
+                    };
+
+                    if ($isImage && $options['origin_filter_name']) {
+                        if ($isSVG) {
+                            $url = $generateOpenUrl();
+                        } else {
+                            $url = $this->cacheManager->getBrowserPath($path, $options['origin_filter_name']);
+                        }
+
+                    } else {
+                        $url = $generateOpenUrl();
+                    }
+
+                    $fileInfo = [
                         'id' => $file->getId(),
-                        'url' => $path,
-                        'name' => $accessor->getValue($file, 'originalFilename'),
-                        'mime_type' => $mimeType,
-                        'icon' => $this->getFileIcon($iconClasses, $mimeType),
-                        'object' => $file,
+                        'url' => $url,
+                        'name' => $originalFilename,
+                        'type' => $mimeType,
+                        'size' => $file->getSize(),
                     ];
+
+                    if ($isImage) {
+                        if ($isSVG) {
+                            $fileInfo['thumbnail_url'] = $url;
+                        } else {
+                            $fileInfo['thumbnail_url'] = $this
+                                ->cacheManager
+                                ->getBrowserPath($path, $options['filter_name']);
+                        }
+                    }
+
+                    $filesInfo[] = $fileInfo;
                 }
             }
         }
-        $view->vars['files'] = $filesInfo;
+        $jsOptions['documents'] = $filesInfo;
+
+        $jsOptions['multiple'] = $options['multiple'];
+
+        $view->vars['js_options'] = json_encode($jsOptions);
+
     }
 
-    private function translate($id, array $parameters = [])
+    private function translate($id, array $parameters = [], $domain)
     {
-        return $this->translator->trans($id, $parameters, 'ArthemFileBundle');
-    }
-
-    private function getFileIcon(array $iconsClasses, $mimeType)
-    {
-        if (isset($iconsClasses[$mimeType])) {
-            return $iconsClasses[$mimeType];
-        }
-
-        foreach ($iconsClasses as $mask => $iconsClass) {
-            if (preg_match('#^'.$iconsClass.'$#', $mimeType)) {
-                return $iconsClass;
-            }
-        }
-
-        return null;
+        return $this->translator->trans($id, $parameters, $domain);
     }
 
     public function getBlockPrefix()
     {
-        return 'arthem_file';
+        return 'arthem_react_file';
     }
 }

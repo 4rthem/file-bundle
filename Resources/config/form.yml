@@ -20,3 +20,18 @@ services:
             - "%arthem_file.form.default.preview_height%"
         tags:
             - { name: form.type, alias: arthem_file }
+
+    Arthem\Bundle\FileBundle\Form\Type\ReactFileType:
+        arguments:
+            - "%arthem_file.model.file.class%"
+            - "@arthem_file.manager_registry"
+            - "@arthem_file.listener.uploadable"
+            - "@security.authorization_checker"
+            - "@router"
+            - "@translator"
+            - "%arthem_file.form.default.filter_name%"
+            - "%arthem_file.form.default.origin_filter_name%"
+            - "%arthem_file.form.default.preview_width%"
+            - "%arthem_file.form.default.preview_height%"
+        tags:
+            - { name: form.type, alias: arthem_file }
