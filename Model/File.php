@@ -62,6 +62,11 @@ class File implements FileInterface, ImageInterface
     protected $token;
 
     /**
+     * @var string|null
+     */
+    protected $userId;
+
+    /**
      * @var float
      */
     protected $size;
@@ -215,6 +220,16 @@ class File implements FileInterface, ImageInterface
         $this->token = $token;
 
         return $this;
+    }
+
+    public function setUserId(string $userId): void
+    {
+        $this->userId = $userId;
+    }
+
+    public function getUserId(): ?string
+    {
+        return $this->userId;
     }
 
     /**

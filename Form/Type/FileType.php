@@ -127,17 +127,20 @@ class FileType extends AbstractType
         $csrfTokenManager = $options['csrf_token_manager'];
         $token = $csrfTokenManager->getToken('file')->getValue();
 
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($token) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($options, $token) {
             $config = $event->getForm()->getConfig();
             $multiple = $config->getOption('multiple');
             $data = $event->getForm()->get('file')->getData();
 
-            $handleFile = function ($data) use ($token) {
+            $handleFile = function ($data) use ($token, $options) {
                 if ($data instanceof UploadedFile) {
                     /** @var FileInterface $file */
                     $file = new $this->class();
                     $file->setFile($data);
                     $file->setToken($token);
+                    if ($options['user_id']) {
+                        $file->setUserId($options['user_id']);
+                    }
 
                     return $file;
                 } else {
@@ -259,6 +262,7 @@ class FileType extends AbstractType
             'origin_filter_name' => $this->defaultOriginFilterName,
             'crop' => false,
             'ajax' => false,
+            'user_id' => null,
             'target_selector' => null,
             'display_placeholder' => false,
             'preview_width' => $this->defaultPreviewWidth,

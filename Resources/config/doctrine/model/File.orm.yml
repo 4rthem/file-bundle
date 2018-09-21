@@ -26,6 +26,10 @@ Arthem\Bundle\FileBundle\Model\File:
             type: string
             length: 255
             nullable: true
+        userId:
+            type: string
+            length: 255
+            nullable: true
         mimeType:
             type: string
             length: 100

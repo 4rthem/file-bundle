@@ -66,6 +66,10 @@ interface FileInterface
      */
     public function setToken($token);
 
+    public function setUserId(string $userId): void;
+
+    public function getUserId(): ?string;
+
     /**
      * @return float
      */
