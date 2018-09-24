@@ -60,7 +60,9 @@ class FileUploadManager
         Request $request,
         \Closure $callback = null,
         array $fileOptions = [],
-        ?callable $urlHandler = null)
+        ?callable $urlHandler = null,
+        ?callable $onFilePersisted = null
+    )
     {
         $multiple = $fileOptions['multiple'] ?? false;
         $form = $this->getForm($fileOptions);
@@ -85,6 +87,8 @@ class FileUploadManager
                 foreach ($data as $d) {
                     $this->om->persist($d);
                     $files[] = $this->getFileResponse($d, $request, $urlHandler);
+
+                    $onFilePersisted ? $onFilePersisted($d) : null;
                 }
 
                 $response = new JsonResponse([
@@ -92,6 +96,7 @@ class FileUploadManager
                 ]);
             } else {
                 $file = $this->getFileResponse($data, $request, $urlHandler);
+                $onFilePersisted ? $onFilePersisted($data) : null;
 
                 $response = new JsonResponse([
                     'file' => $file,
