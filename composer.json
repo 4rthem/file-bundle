@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7",
-        "liip/imagine-bundle": "^1.7",
+        "liip/imagine-bundle": "^2.0",
         "stof/doctrine-extensions-bundle": "^1.2",
         "guzzlehttp/guzzle": "^6.2",
         "ramsey/uuid": "^3.0"
