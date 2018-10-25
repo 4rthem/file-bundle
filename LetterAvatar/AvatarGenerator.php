@@ -43,11 +43,21 @@ class AvatarGenerator
 
     private function getInitials(string $str): array
     {
+        $str = trim($str);
         $initials = [];
         foreach (preg_split("/\s+/", $str) as $word) {
-            $initials[] = strtoupper($word[0]);
+            $initial = strtoupper($word[0]);
+            $initials[] = $initial;
             if (count($initials) === 2) {
                 break;
+            }
+        }
+
+        if (1 === count($initials)) {
+            if (strlen($str) > 1) {
+                $initials[] = strtoupper($str[1]);
+            } else {
+                $initials = [$initials[0], $initials[0]];
             }
         }
 
