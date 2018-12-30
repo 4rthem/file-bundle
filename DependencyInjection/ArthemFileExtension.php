@@ -61,6 +61,10 @@ class ArthemFileExtension extends Extension
             $this->loadAvatar($container, $loader, $config['letter_avatar']);
         }
 
+        if ($config['graphql']['enabled']) {
+            $this->loadGraphQL($container, $loader, $config['graphql']);
+        }
+
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ArthemFixturesBundle'])) {
             $loader->load('fixture.yml');
@@ -91,6 +95,11 @@ class ArthemFileExtension extends Extension
             new Reference(LetterAvatarManager::class),
             $config['mapping'],
         ]);
+    }
+
+    public function loadGraphQL(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    {
+        $loader->load('graphql.yml');
     }
 
     public function loadImage(ContainerBuilder $container, LoaderInterface $loader, array $config)

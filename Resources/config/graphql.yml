@@ -1,0 +1,7 @@
+
+services:
+    _defaults:
+        autowire: true
+
+    Arthem\Bundle\FileBundle\GraphQL\PictureResolver:
+        public: true
