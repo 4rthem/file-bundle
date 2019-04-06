@@ -7,6 +7,7 @@ use Arthem\Bundle\FileBundle\ImageManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -146,8 +147,9 @@ class FileUploadManager
 
     private function getErrors(FormInterface $form, array &$errors)
     {
+        /** @var FormError $error */
         foreach ($form->getErrors() as $error) {
-            $errors[] = $this->translator->trans(
+            $errors[] = $error->getOrigin()->getName().': '.$this->translator->trans(
                 $error->getMessage(),
                 $error->getMessageParameters(),
                 'ArthemFileBundle'
