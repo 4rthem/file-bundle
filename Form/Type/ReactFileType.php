@@ -116,6 +116,7 @@ class ReactFileType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $csrfProtection = isset($options['csrf_token_manager']);
         $fileAttr = [];
         if ($options['capture']) {
             $fileAttr['capture'] = true;
@@ -139,21 +140,27 @@ class ReactFileType extends AbstractType
             'mapped' => false,
         ]);
 
-        /** @var CsrfTokenManagerInterface $csrfTokenManager */
-        $csrfTokenManager = $options['csrf_token_manager'];
-        $token = $csrfTokenManager->getToken('file')->getValue();
+        if ($csrfProtection) {
+            /** @var CsrfTokenManagerInterface $csrfTokenManager */
+            $csrfTokenManager = $options['csrf_token_manager'];
+            $token = $csrfTokenManager->getToken('file')->getValue();
+        } else {
+            $token = null;
+        }
 
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($options, $token) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($csrfProtection, $options, $token) {
             $config = $event->getForm()->getConfig();
             $multiple = $config->getOption('multiple');
             $data = $event->getForm()->get('file')->getData();
 
-            $handleFile = function ($data) use ($token, $options) {
+            $handleFile = function ($data) use ($csrfProtection, $token, $options) {
                 if ($data instanceof UploadedFile) {
                     /** @var FileInterface $file */
                     $file = new $this->class();
                     $file->setFile($data);
-                    $file->setToken($token);
+                    if ($csrfProtection) {
+                        $file->setToken($token);
+                    }
                     if ($options['user_id']) {
                         $file->setUserId($options['user_id']);
                     }
@@ -187,7 +194,7 @@ class ReactFileType extends AbstractType
             }, 100);
         }
 
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($token) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($csrfProtection, $token) {
             $config = $event->getForm()->getConfig();
             $multiple = $config->getOption('multiple');
 
@@ -208,7 +215,7 @@ class ReactFileType extends AbstractType
                         ->getResult();
 
                     foreach ($result as $file) {
-                        if ($token !== $file->getToken() && !$originData->contains($file)) {
+                        if ($csrfProtection && $token !== $file->getToken() && !$originData->contains($file)) {
                             throw new AccessDeniedHttpException('Invalid file token');
                         }
                         $files[] = $file;
@@ -222,7 +229,7 @@ class ReactFileType extends AbstractType
                 } elseif ($data) {
                     $file = $this->om->find($this->class, $data);
                     if ($file instanceof FileInterface) {
-                        if ($originData !== $file && $token !== $file->getToken()) {
+                        if ($csrfProtection && $originData !== $file && $token !== $file->getToken()) {
                             throw new AccessDeniedHttpException('Invalid file token');
                         }
                         $event->setData($file);
@@ -312,6 +319,7 @@ class ReactFileType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        $csrfProtection = isset($options['csrf_token_manager']);
         $jsOptions = [
             'confirmDeleteLabel' => $this->translate($options['remove_file_confirm_label'], [], $options['browse_translation_domain']),
             'browseButtonLabel' => $this->translate($options['browse_label'], [], $options['browse_translation_domain']),
@@ -327,7 +335,9 @@ class ReactFileType extends AbstractType
             if ($options['origin_filter_name']) {
                 $uploadParams['origin_filter_name'] = $options['origin_filter_name'];
             }
-            $uploadParams['file[_token]'] = (string)$rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
+            if ($csrfProtection) {
+                $uploadParams['file[_token]'] = (string)$rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
+            }
 
 
             $jsOptions += [
