@@ -260,6 +260,21 @@ class File implements FileInterface, ImageInterface
         $this->cropDates[$filterName] = $date;
     }
 
+    public function setOriginalFilename(string $originalFilename): void
+    {
+        $this->originalFilename = $originalFilename;
+    }
+
+    public function setExtension(string $extension): void
+    {
+        $this->extension = $extension;
+    }
+
+    public function setSize(float $size): void
+    {
+        $this->size = $size;
+    }
+
     /**
      * Used to return path to the ImageValidator.
      *
