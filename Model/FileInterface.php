@@ -46,6 +46,8 @@ interface FileInterface
      */
     public function setMimeType($mimeType);
 
+    public function getOriginalFilename(): ?string;
+
     /**
      * @return string
      */

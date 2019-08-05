@@ -117,7 +117,7 @@ class FileUploadManager
         return $response;
     }
 
-    private function getFileResponse(FileInterface $file, Request $request, ?callable $urlHandler)
+    public function getFileResponse(FileInterface $file, Request $request, ?callable $urlHandler)
     {
         if (strpos($file->getMimeType(), 'image/') === 0) {
             if ($originFilterName = $request->get('origin_filter_name')) {
