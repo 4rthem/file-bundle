@@ -124,10 +124,7 @@ class File implements FileInterface, ImageInterface
         $this->mimeType = $mimeType;
     }
 
-    /**
-     * @return string
-     */
-    public function getOriginalFilename()
+    public function getOriginalFilename(): ?string
     {
         return $this->originalFilename;
     }
