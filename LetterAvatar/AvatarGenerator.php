@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\LetterAvatar;
-
 
 class AvatarGenerator
 {
@@ -48,7 +46,7 @@ class AvatarGenerator
         foreach (preg_split("/\s+/", $str) as $word) {
             $initial = strtoupper($word[0]);
             $initials[] = $initial;
-            if (count($initials) === 2) {
+            if (2 === count($initials)) {
                 break;
             }
         }

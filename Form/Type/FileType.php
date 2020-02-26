@@ -6,7 +6,7 @@ use Arthem\Bundle\FileBundle\EventListener\UploadableListener;
 use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Arthem\Bundle\FileBundle\Validator\File;
 use Doctrine\ORM\EntityManager;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType as BaseFileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -76,7 +76,7 @@ class FileType extends AbstractType
 
     public function __construct(
         $class,
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         UploadableListener $uploadableListener,
         AuthorizationCheckerInterface $authorizationChecker,
         RouterInterface $router,
@@ -210,7 +210,7 @@ class FileType extends AbstractType
                 }
             } else {
                 if ($fileInput->getData() instanceof UploadedFile) {
-                    ; // Valid case
+                    // Valid case
                 } elseif ($data) {
                     $file = $this->om->find($this->class, $data);
                     if ($file instanceof FileInterface) {
@@ -224,7 +224,6 @@ class FileType extends AbstractType
                 }
             }
         });
-
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use (&$options) {
             $idInput = $event->getForm()->get('id');
@@ -244,7 +243,6 @@ class FileType extends AbstractType
                 }
             }
         });
-
 
         $builder->add($fileInput);
         $builder->add($idInput);
@@ -309,7 +307,7 @@ class FileType extends AbstractType
         ]);
 
         $resolver->setNormalizer('crop', function (Options $options, $value) {
-            if ($value === true && !$options['ajax']) {
+            if (true === $value && !$options['ajax']) {
                 throw new \InvalidArgumentException('"ajax" must be enabled with "crop"');
             }
 
@@ -319,10 +317,6 @@ class FileType extends AbstractType
 
     /**
      * Pass the file URL to the view.
-     *
-     * @param FormView      $view
-     * @param FormInterface $form
-     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {

@@ -10,7 +10,7 @@ use Youshido\GraphQL\Type\Scalar\StringType;
 class PictureType extends AbstractObjectType
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function build($config)
     {

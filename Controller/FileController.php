@@ -6,11 +6,11 @@ use Arthem\Bundle\FileBundle\Doctrine\ImageCropManager;
 use Arthem\Bundle\FileBundle\ImageManager;
 use Arthem\Bundle\FileBundle\Model\FileUploadManager;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class FileController extends Controller
+class FileController extends AbstractController
 {
     public function uploadAction(Request $request)
     {

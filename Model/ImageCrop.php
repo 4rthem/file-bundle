@@ -62,8 +62,6 @@ class ImageCrop
     }
 
     /**
-     * @param FileInterface $file
-     *
      * @return $this
      */
     public function setFile(FileInterface $file)

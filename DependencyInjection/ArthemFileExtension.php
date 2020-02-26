@@ -64,11 +64,6 @@ class ArthemFileExtension extends Extension
         if ($config['graphql']['enabled']) {
             $this->loadGraphQL($container, $loader, $config['graphql']);
         }
-
-        $bundles = $container->getParameter('kernel.bundles');
-        if (isset($bundles['ArthemFixturesBundle'])) {
-            $loader->load('fixture.yml');
-        }
     }
 
     public function loadStorage(ContainerBuilder $container, LoaderInterface $loader, array $config)

@@ -55,7 +55,13 @@ class FileDownloader
         $tmpFile = $this->tempDir.'/'.uniqid().'.'.$extension;
         file_put_contents($tmpFile, $response->getBody()->getContents());
 
-        $fileInfo = new UploadedFile($tmpFile, basename($tmpFile), $mimeType, filesize($tmpFile), null, true);
+        $fileInfo = new UploadedFile(
+            $tmpFile,
+            basename($tmpFile),
+            $mimeType,
+            null,
+            true
+        );
 
         /** @var FileInterface $file */
         $file = new $this->fileClass();

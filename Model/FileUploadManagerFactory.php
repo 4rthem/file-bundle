@@ -3,17 +3,15 @@
 namespace Arthem\Bundle\FileBundle\Model;
 
 use Arthem\Bundle\FileBundle\ImageManager;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Asset\PackageInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class FileUploadManagerFactory
 {
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     protected $doctrine;
 
@@ -28,7 +26,7 @@ class FileUploadManagerFactory
     protected $requestStack;
 
     public function __construct(
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         FormFactoryInterface $formFactory,
         ImageManager $imageManager,
         Packages $assetsHelper,

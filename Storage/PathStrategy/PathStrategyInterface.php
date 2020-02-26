@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Arthem\Bundle\FileBundle\Storage\PathStrategy;
 
 use Arthem\Bundle\FileBundle\Model\FileInterface;

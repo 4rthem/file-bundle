@@ -4,12 +4,18 @@
     "type": "symfony-bundle",
     "license": "MIT",
     "require": {
-        "php": ">=7",
+        "php": ">=7.1",
         "liip/imagine-bundle": "^2.0",
-        "symfony/framework-bundle": "^3.0|^4.0",
+        "symfony/framework-bundle": "^4.2",
         "stof/doctrine-extensions-bundle": "^1.2",
         "guzzlehttp/guzzle": "^6.2",
         "ramsey/uuid": "^3.0"
+    },
+    "require-dev": {
+        "doctrine/orm": "^2.6",
+        "symfony/twig-bundle": "^4.2",
+        "symfony/form": "^4.2",
+        "youshido/graphql-bundle": "^1.4"
     },
     "autoload": {
         "psr-4": {

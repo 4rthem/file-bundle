@@ -3,10 +3,10 @@
 namespace Arthem\Bundle\FileBundle\Controller;
 
 use Arthem\Bundle\FileBundle\LetterAvatar\AvatarGenerator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class PlaceholderController extends Controller
+class PlaceholderController extends AbstractController
 {
     public function letterAvatarAction(string $text)
     {

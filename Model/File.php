@@ -135,7 +135,7 @@ class File implements FileInterface, ImageInterface
     }
 
     /**
-     * @param array $file
+     * @param array|UploadedFile $file
      */
     public function setFile($file)
     {

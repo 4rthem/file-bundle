@@ -33,8 +33,6 @@ class RegisterMappingsPass implements CompilerPassInterface
 
     /**
      * Register mappings with the metadata drivers.
-     *
-     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
@@ -50,8 +48,6 @@ class RegisterMappingsPass implements CompilerPassInterface
     }
 
     /**
-     * @param ContainerBuilder $container
-     *
      * @throws ParameterNotFoundException
      *
      * @return string

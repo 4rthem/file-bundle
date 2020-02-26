@@ -4,7 +4,7 @@ namespace Arthem\Bundle\FileBundle\Model;
 
 use Arthem\Bundle\FileBundle\Form\Type\FileType;
 use Arthem\Bundle\FileBundle\ImageManager;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormError;
@@ -35,8 +35,7 @@ class FileUploadManager
         ImageManager $imageManager,
         Packages $assetsHelper,
         TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->om = $om;
         $this->formFactory = $formFactory;
         $this->imageManager = $imageManager;
@@ -45,8 +44,6 @@ class FileUploadManager
     }
 
     /**
-     * @param array $fileOptions
-     *
      * @return FormInterface
      */
     public function getForm(array $fileOptions = [])
@@ -63,8 +60,7 @@ class FileUploadManager
         array $fileOptions = [],
         ?callable $urlHandler = null,
         ?callable $onFilePersisted = null
-    )
-    {
+    ) {
         $multiple = $fileOptions['multiple'] ?? false;
         $form = $this->getForm($fileOptions);
         $form->handleRequest($request);
@@ -119,7 +115,7 @@ class FileUploadManager
 
     public function getFileResponse(FileInterface $file, Request $request, ?callable $urlHandler)
     {
-        if (strpos($file->getMimeType(), 'image/') === 0) {
+        if (0 === strpos($file->getMimeType(), 'image/')) {
             if ($originFilterName = $request->get('origin_filter_name')) {
                 $fileUrl = $this->imageManager->getImagePath($file, $originFilterName);
             } else {

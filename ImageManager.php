@@ -38,10 +38,6 @@ class ImageManager
         $this->cropActive = $cropActive;
     }
 
-    /**
-     * @param LetterAvatarManager $avatarManager
-     * @param array $letterAvatars
-     */
     public function setLetterAvatars(LetterAvatarManager $avatarManager, array $letterAvatars)
     {
         $this->avatarManager = $avatarManager;

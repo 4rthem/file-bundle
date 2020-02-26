@@ -1,9 +1,0 @@
-
-services:
-    arthem_fixtures.extension.uploadedfile:
-        public: false
-        class: Arthem\Bundle\FileBundle\Fixture\FileExtension
-        arguments:
-            - %kernel.root_dir%/../web
-        tags:
-            - { name: arthem_fixtures.extension }

@@ -2,20 +2,21 @@
 
 namespace Arthem\Bundle\FileBundle\Doctrine;
 
-use Arthem\Bundle\BaseBundle\Exception\UnexpectedTypeException;
 use Arthem\Bundle\FileBundle\Model\ImageCrop;
 use Arthem\Bundle\FileBundle\Model\ImageInterface;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ImageCropManager
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $em;
 
@@ -28,7 +29,7 @@ class ImageCropManager
 
     protected $linkedFilters;
 
-    public function __construct(EntityManager $em, $fileClass, $imageCropClass, CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, array $linkedFilters = [])
+    public function __construct(EntityManagerInterface $em, $fileClass, $imageCropClass, CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager, array $linkedFilters = [])
     {
         $this->em = $em;
         $this->fileClass = $fileClass;
@@ -51,17 +52,15 @@ class ImageCropManager
             throw new NotFoundHttpException('Image not found');
         }
         if (!$image instanceof ImageInterface) {
-            throw new UnexpectedTypeException($image, ['Arthem\Bundle\FileBundle\Model\ImageInterface']);
+            throw new RuntimeException(sprintf('$image must implement %s', ImageInterface::class));
         }
 
         return $image;
     }
 
     /**
-     * @param ImageInterface $image
-     * @param string         $originFilter
-     * @param string         $filter
-     * @param array          $cropCoordinates
+     * @param string $originFilter
+     * @param string $filter
      *
      * @return ImageCrop
      */
@@ -79,10 +78,10 @@ class ImageCropManager
         $filterConfig = $filterConfiguration->get($filter);
 
         if (!isset($originFilterConfig['filters']['thumbnail']['size'])) {
-            throw new \InvalidArgumentException('Missing thumbnail filter for origin');
+            throw new InvalidArgumentException('Missing thumbnail filter for origin');
         }
         if (!isset($filterConfig['filters']['thumbnail']['size'])) {
-            throw new \InvalidArgumentException('Missing thumbnail filter');
+            throw new InvalidArgumentException('Missing thumbnail filter');
         }
 
         /** @var ImageCrop[] $crops */

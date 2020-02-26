@@ -98,8 +98,7 @@ class ReactFileType extends AbstractType
         $defaultPreviewWidth,
         $defaultPreviewHeight,
         ?CacheManager $cacheManager = null
-    )
-    {
+    ) {
         $this->class = $class;
         $this->om = $registry->getManagerForClass($class);
         $this->uploadableListener = $uploadableListener;
@@ -225,7 +224,7 @@ class ReactFileType extends AbstractType
                 $event->setData($files);
             } else {
                 if ($fileInput->getData() instanceof UploadedFile) {
-                    ; // Valid case
+                    // Valid case
                 } elseif ($data) {
                     $file = $this->om->find($this->class, $data);
                     if ($file instanceof FileInterface) {
@@ -258,7 +257,6 @@ class ReactFileType extends AbstractType
                 }
             }
         });
-
 
         $builder->add($fileInput);
         $builder->add($idInput);
@@ -312,10 +310,6 @@ class ReactFileType extends AbstractType
 
     /**
      * Pass the file URL to the view.
-     *
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -336,14 +330,13 @@ class ReactFileType extends AbstractType
                 $uploadParams['origin_filter_name'] = $options['origin_filter_name'];
             }
             if ($csrfProtection) {
-                $uploadParams['file[_token]'] = (string)$rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
+                $uploadParams['file[_token]'] = (string) $rootForm->getConfig()->getOption('csrf_token_manager')->getToken('file');
             }
-
 
             $jsOptions += [
                 'uploadUrl' => $options['url'],
                 'fieldName' => 'file[file][file]',
-                'idFieldName' => $view->vars['full_name'] . '[id]',
+                'idFieldName' => $view->vars['full_name'].'[id]',
                 'uploadParams' => $uploadParams,
             ];
 
@@ -386,7 +379,6 @@ class ReactFileType extends AbstractType
                         } else {
                             $url = $this->cacheManager->getBrowserPath($path, $options['origin_filter_name']);
                         }
-
                     } else {
                         $url = $generateOpenUrl();
                     }
@@ -418,7 +410,6 @@ class ReactFileType extends AbstractType
         $jsOptions['multiple'] = $options['multiple'];
 
         $view->vars['js_options'] = json_encode($jsOptions);
-
     }
 
     private function translate($id, array $parameters = [], $domain)

@@ -10,12 +10,13 @@ class GedmoUploadableListener extends UploadableListener
 {
     public function doMoveFile($source, $dest, $isUploadedFile = true)
     {
-        $path = self::getUploadTmpDir() . '/' . $dest;
+        $path = self::getUploadTmpDir().'/'.$dest;
         $dir = dirname($path);
 
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
+
         return parent::doMoveFile($source, $path, $isUploadedFile);
     }
 
@@ -32,8 +33,8 @@ class GedmoUploadableListener extends UploadableListener
         return $return;
     }
 
-    static public function getUploadTmpDir(): string
+    public static function getUploadTmpDir(): string
     {
-        return sys_get_temp_dir() . '/app-upload';
+        return sys_get_temp_dir().'/app-upload';
     }
 }

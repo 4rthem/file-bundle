@@ -4,8 +4,10 @@ namespace Arthem\Bundle\FileBundle\Twig\Extension;
 
 use Arthem\Bundle\FileBundle\ImageManager;
 use Arthem\Bundle\FileBundle\Model\FileInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class ImageExtension extends \Twig_Extension
+class ImageExtension extends AbstractExtension
 {
     /**
      * @var ImageManager
@@ -30,9 +32,9 @@ class ImageExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('image', [$this, 'image']),
-            new \Twig_SimpleFilter('image_placeholder', [$this, 'imagePlaceholder']),
-            new \Twig_SimpleFilter('letter_avatar', [$this, 'letterAvatar']),
+            new TwigFilter('image', [$this, 'image']),
+            new TwigFilter('image_placeholder', [$this, 'imagePlaceholder']),
+            new TwigFilter('letter_avatar', [$this, 'letterAvatar']),
         ];
     }
 
