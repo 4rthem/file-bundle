@@ -2,6 +2,8 @@
 
 namespace Arthem\Bundle\FileBundle\LetterAvatar;
 
+use Twig\Environment;
+
 class AvatarGenerator
 {
     /**
@@ -15,11 +17,11 @@ class AvatarGenerator
     private $font;
 
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     private $renderer;
 
-    public function __construct(\Twig_Environment $renderer, array $colors, string $font)
+    public function __construct(Environment $renderer, array $colors, string $font)
     {
         $this->colors = $colors;
         $this->font = $font;
