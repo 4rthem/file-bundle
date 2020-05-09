@@ -59,8 +59,10 @@ class ImageManager
             && null !== $letterAvatarUrl = $this->getLetterAvatarUrl($object, $this->letterAvatars[$objectClass][$field])
         ) {
             return $this->cache[$key] = $letterAvatarUrl;
-        } else {
+        } elseif ($this->isPlaceholderDefined($objectClass, $field)) {
             return $this->cache[$key] = $this->imagePlaceholder($objectClass, $field, $filter);
+        } else {
+            return $this->cache[$key] = null;
         }
 
         if (null === $path) {
@@ -117,13 +119,18 @@ class ImageManager
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
-        if ($objectClass && isset($this->placeholders[$objectClass][$field])) {
+        if ($this->isPlaceholderDefined($objectClass, $field)) {
             $path = $this->placeholders[$objectClass][$field];
 
             return $this->cache[$key] = $this->cacheManager->getBrowserPath($path, $filter);
         } else {
             throw new \InvalidArgumentException(sprintf('Placeholder is not defined for %s::%s', $objectClass, $field));
         }
+    }
+
+    private function isPlaceholderDefined($objectClass, string $field): bool
+    {
+        return $objectClass && isset($this->placeholders[$objectClass][$field]);
     }
 
     public function getImagePath(FileInterface $image, $filter)
