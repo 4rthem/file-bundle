@@ -23,8 +23,13 @@ class PictureResolver
     {
         $filter = $args['filter'] ?? 'medium';
 
+        $imagePath = $this->imageManager->imagePath($value, 'picture', $filter);
+        if (null === $imagePath) {
+            return null;
+        }
+
         return [
-            'url' => $this->imageManager->imagePath($value, 'picture', $filter),
+            'url' => $imagePath,
         ];
     }
 }
