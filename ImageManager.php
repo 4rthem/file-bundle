@@ -69,7 +69,7 @@ class ImageManager
             return $this->cache[$key] = null;
         }
 
-        $this->cache[$key] = $this->cacheManager->getBrowserPath($path, $filter);
+        $this->cache[$key] = $this->cacheManager->generateUrl($path, $filter);
         if ($this->cropActive && $image instanceof ImageInterface && (null !== $cropDate = $image->getCropDate($filter))) {
             $this->cache[$key] .= '?'.$cropDate;
         }
