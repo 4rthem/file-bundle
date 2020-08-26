@@ -2,6 +2,7 @@
 
 namespace Arthem\Bundle\FileBundle\LetterAvatar;
 
+use Cocur\Slugify\Slugify;
 use Twig\Environment;
 
 class AvatarGenerator
@@ -44,8 +45,14 @@ class AvatarGenerator
     private function getInitials(string $str): array
     {
         $str = trim($str);
+
+        if (class_exists(Slugify::class)) {
+            $slugify = new Slugify(['separator' => ' ']);
+            $str = $slugify->slugify($str);
+        }
+
         $initials = [];
-        foreach (preg_split("/\s+/", $str) as $word) {
+        foreach (preg_split('/\s+/', $str) as $word) {
             $initial = strtoupper($word[0]);
             $initials[] = $initial;
             if (2 === count($initials)) {

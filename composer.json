@@ -17,6 +17,9 @@
         "symfony/form": "^4.2",
         "youshido/graphql-bundle": "^1.4"
     },
+    "suggest": {
+        "cocur/slugify": "For letter avatar"
+    },
     "autoload": {
         "psr-4": {
             "Arthem\\Bundle\\FileBundle\\": ""
