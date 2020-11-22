@@ -33,11 +33,17 @@ class AvatarGenerator
     {
         $initials = $this->getInitials($name);
 
-        $color = (int) floor(crc32($name) % count($this->colors));
+        $color1 = (int) floor(crc32($name) % count($this->colors));
+        $color2 = (int) floor(crc32(strrev($name)) % count($this->colors));
+        if ($color2 === $color1) {
+            $color2 = (int) floor((crc32(strrev($name)) + 1) % count($this->colors));
+        }
 
         return $this->renderer->render('@ArthemFile/Placeholder/letter_avatar.svg.twig', [
             'text' => implode('', $initials),
-            'color' => $this->colors[$color],
+            'color1' => $this->colors[$color1],
+            'color2' => $this->colors[$color2],
+            'percent' => round((crc32($name) % 100) / 100),
             'font' => $this->font,
         ]);
     }
@@ -52,6 +58,9 @@ class AvatarGenerator
         }
 
         $initials = [];
+        if (empty(trim($str))) {
+            $str = '--';
+        }
         foreach (preg_split('/\s+/', $str) as $word) {
             $initial = strtoupper($word[0]);
             $initials[] = $initial;

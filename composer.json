@@ -9,7 +9,8 @@
         "symfony/framework-bundle": "^4.2",
         "stof/doctrine-extensions-bundle": "^1.2",
         "guzzlehttp/guzzle": "^6.2",
-        "ramsey/uuid": "^3.0"
+        "ramsey/uuid": "^3.0",
+        "cocur/slugify": "^4.0"
     },
     "require-dev": {
         "doctrine/orm": "^2.6",
