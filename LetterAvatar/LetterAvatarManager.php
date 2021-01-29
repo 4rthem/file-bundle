@@ -16,10 +16,11 @@ class LetterAvatarManager
         $this->router = $router;
     }
 
-    public function generatePath(string $text): string
+    public function generatePath(string $text, ?string $color = null): string
     {
         return $this->router->generate('arthem_file_letter_avatar', [
             'text' => urlencode(base64_encode($text)),
+            'c' => $color,
         ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

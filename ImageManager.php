@@ -77,14 +77,31 @@ class ImageManager
         return $this->cache[$key];
     }
 
-    public function getLetterAvatarUrl($object, string $textField): ?string
+    /**
+     * @param string|array $fields
+     */
+    public function getLetterAvatarUrl($object, $fields, ?string $colorField = null): ?string
     {
+        if (is_array($fields)) {
+            [$textField, $colorField] = $fields;
+        } else {
+            $colorField = null;
+            $textField = $fields;
+        }
+
         $text = $object->{'get'.ucfirst($textField)}();
         if (null === $text) {
             return null;
         }
+        $color = null;
+        if (null !== $colorField) {
+            $color = $object->{'get'.ucfirst($colorField)}();
+            if (empty($color)) {
+                $color = null;
+            }
+        }
 
-        return $this->avatarManager->generatePath($text);
+        return $this->avatarManager->generatePath($text, $color);
     }
 
     public function letterAvatar($object, string $field): ?string

@@ -29,21 +29,22 @@ class AvatarGenerator
         $this->renderer = $renderer;
     }
 
-    public function generate(string $name): string
+    public function generate(string $name, ?string $color = null): string
     {
         $initials = $this->getInitials($name);
 
-        $color1 = (int) floor(crc32($name) % count($this->colors));
-        $color2 = (int) floor(crc32(strrev($name)) % count($this->colors));
+        $color ??= $name;
+        $color1 = (int) floor(crc32($color) % count($this->colors));
+        $color2 = (int) floor(crc32(strrev($color)) % count($this->colors));
         if ($color2 === $color1) {
-            $color2 = (int) floor((crc32(strrev($name)) + 1) % count($this->colors));
+            $color2 = (int) floor((crc32(strrev($color)) + 1) % count($this->colors));
         }
 
         return $this->renderer->render('@ArthemFile/Placeholder/letter_avatar.svg.twig', [
             'text' => implode('', $initials),
             'color1' => $this->colors[$color1],
             'color2' => $this->colors[$color2],
-            'percent' => round((crc32($name) % 100) / 100),
+            'percent' => round((crc32($color) % 100) / 100),
             'font' => $this->font,
         ]);
     }
