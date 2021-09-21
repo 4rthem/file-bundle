@@ -2,8 +2,8 @@
 
 namespace Arthem\Bundle\FileBundle\Doctrine;
 
-use Doctrine\Common\Persistence\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Persistence\Event\LoadClassMetadataEventArgs;
 
 class MappingListener extends AbstractMappingListener
 {
