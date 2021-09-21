@@ -17,7 +17,11 @@
         "doctrine/orm": "^2.6",
         "symfony/twig-bundle": "^4.2",
         "symfony/form": "^4.2",
-        "youshido/graphql-bundle": "^1.4"
+        "youshido/graphql-bundle": "^1.4",
+        "symfony/validator": "^4",
+        "symfony/security": "^4",
+        "symfony/translation": "^4",
+        "symfony/asset": "^4"
     },
     "suggest": {
         "cocur/slugify": "For letter avatar"

@@ -232,7 +232,7 @@ class File implements FileInterface, ImageInterface
     /**
      * @param string $filterName
      *
-     * @return ImageCrop
+     * @return ImageCrop|null
      */
     public function getImageCrop($filterName)
     {
@@ -243,6 +243,8 @@ class File implements FileInterface, ImageInterface
                 }
             }
         }
+
+        return null;
     }
 
     public function getCropDate($filterName)
@@ -250,6 +252,8 @@ class File implements FileInterface, ImageInterface
         if (isset($this->cropDates[$filterName])) {
             return $this->cropDates[$filterName];
         }
+
+        return null;
     }
 
     public function setCropDate($filterName, $date)

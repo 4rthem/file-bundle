@@ -5,7 +5,7 @@ namespace Arthem\Bundle\FileBundle\Controller;
 use Arthem\Bundle\FileBundle\Doctrine\ImageCropManager;
 use Arthem\Bundle\FileBundle\ImageManager;
 use Arthem\Bundle\FileBundle\Model\FileUploadManager;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

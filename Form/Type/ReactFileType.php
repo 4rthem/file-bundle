@@ -412,7 +412,7 @@ class ReactFileType extends AbstractType
         $view->vars['js_options'] = json_encode($jsOptions);
     }
 
-    private function translate($id, array $parameters = [], $domain)
+    private function translate($id, array $parameters, $domain)
     {
         return $this->translator->trans($id, $parameters, $domain);
     }

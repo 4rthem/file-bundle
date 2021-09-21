@@ -85,7 +85,7 @@ class FileUploadManager
                     $this->om->persist($d);
                     $files[] = $this->getFileResponse($d, $request, $urlHandler);
 
-                    $onFilePersisted ? $onFilePersisted($d) : null;
+                    $onFilePersisted && $onFilePersisted($d);
                 }
 
                 $response = new JsonResponse([
@@ -93,7 +93,7 @@ class FileUploadManager
                 ]);
             } else {
                 $file = $this->getFileResponse($data, $request, $urlHandler);
-                $onFilePersisted ? $onFilePersisted($data) : null;
+                $onFilePersisted && $onFilePersisted($data);
 
                 $response = new JsonResponse([
                     'file' => $file,
