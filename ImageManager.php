@@ -7,35 +7,25 @@ use Arthem\Bundle\FileBundle\Model\FileInterface;
 use Arthem\Bundle\FileBundle\Model\ImageInterface;
 use Doctrine\Common\Util\ClassUtils;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ImageManager
 {
-    /**
-     * @var CacheManager
-     */
-    private $cacheManager;
-
-    /**
-     * @var array
-     */
-    private $placeholders;
-
-    private $cropActive;
-
-    private $cache = [];
-
-    private $letterAvatars = [];
-
-    /**
-     * @var LetterAvatarManager
-     */
-    private $avatarManager;
+    private CacheManager $cacheManager;
+    private array $placeholders;
+    private bool $cropActive;
+    private array $cache = [];
+    private array $letterAvatars = [];
+    private LetterAvatarManager $avatarManager;
+    private PropertyAccessor $propertyAccessor;
 
     public function __construct(CacheManager $cacheManager, array $placeholders, $cropActive = false)
     {
         $this->cacheManager = $cacheManager;
         $this->placeholders = $placeholders;
         $this->cropActive = $cropActive;
+        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
     public function setLetterAvatars(LetterAvatarManager $avatarManager, array $letterAvatars)
@@ -50,7 +40,8 @@ class ImageManager
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
-        $image = $object->{'get'.ucfirst($field)}();
+
+        $image = $this->propertyAccessor->getValue($object, $field);
         $objectClass = ClassUtils::getRealClass(get_class($object));
         if ($image instanceof FileInterface) {
             $path = $image->getPath();
@@ -89,13 +80,13 @@ class ImageManager
             $textField = $fields;
         }
 
-        $text = $object->{'get'.ucfirst($textField)}();
+        $text = $this->propertyAccessor->getValue($object, $textField);
         if (null === $text) {
             return null;
         }
         $color = null;
         if (null !== $colorField) {
-            $color = $object->{'get'.ucfirst($colorField)}();
+            $color = $this->propertyAccessor->getValue($object, $colorField);
             if (empty($color)) {
                 $color = null;
             }
